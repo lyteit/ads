@@ -832,6 +832,84 @@
             </div>
         </div>
 
+
+
+        <!-- User-Submitted Ads (Pending Review) -->
+        <div class="ads-panel" style="margin-top:20px;">
+            <div class="ads-panel-header">
+                <div class="panel-title" style="margin:0;">
+                    <i class="fas fa-inbox" style="color:#f59e0b;"></i> User Ad Submissions
+                    <span id="pendingCount" style="background:rgba(245,158,11,0.15);color:#f59e0b;border:1px solid rgba(245,158,11,0.3);border-radius:20px;padding:3px 10px;font-size:12px;margin-left:8px;">0 pending</span>
+                </div>
+                <div style="display:flex;gap:8px;">
+                    <button class="btn-secondary" onclick="filterUserAds('pending')" id="uafilt-pending" style="padding:8px 14px;font-size:11px;border-color:rgba(245,158,11,0.4);color:#f59e0b;">Pending</button>
+                    <button class="btn-secondary" onclick="filterUserAds('all')" id="uafilt-all" style="padding:8px 14px;font-size:11px;">All</button>
+                    <button class="btn-secondary" onclick="loadUserAds()" style="padding:8px 14px;font-size:11px;"><i class="fas fa-sync-alt"></i></button>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Title</th>
+                            <th>Advertiser</th>
+                            <th>Type</th>
+                            <th>Package</th>
+                            <th>SRC Paid</th>
+                            <th>Status</th>
+                            <th>Submitted</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userAdsTableBody">
+                        <tr><td colspan="9" style="text-align:center;padding:30px;color:var(--dim);">
+                            <i class="fas fa-circle-notch fa-spin"></i> Loading...
+                        </td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Revenue Dashboard -->
+        <div class="ads-panel" style="margin-top:20px;">
+            <div class="ads-panel-header">
+                <div class="panel-title" style="margin:0;">
+                    <i class="fas fa-coins" style="color:var(--green);"></i> Revenue Dashboard
+                </div>
+                <button class="btn-secondary" onclick="loadRevenue()" style="padding:8px 14px;font-size:12px;"><i class="fas fa-sync-alt"></i> Refresh</button>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:20px;" id="revenueStats">
+                <div class="stat-card"><div class="stat-icon"><i class="fas fa-naira-sign"></i></div><div class="stat-label">Total Revenue (NGN)</div><div class="stat-value" id="revTotalNGN">—</div></div>
+                <div class="stat-card"><div class="stat-icon"><i class="fas fa-coins"></i></div><div class="stat-label">Total Revenue (SRC)</div><div class="stat-value" id="revTotalSRC">—</div></div>
+                <div class="stat-card"><div class="stat-icon"><i class="fas fa-file-invoice"></i></div><div class="stat-label">Total Transactions</div><div class="stat-value" id="revTotalTx">—</div></div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>Date</th><th>Advertiser</th><th>Ad Type</th><th>NGN</th><th>SRC</th></tr>
+                    </thead>
+                    <tbody id="revenueTableBody">
+                        <tr><td colspan="5" style="text-align:center;padding:30px;color:var(--dim);">Click Refresh to load revenue data</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Reject Reason Modal -->
+        <div id="rejectModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+            <div style="background:#15171a;border:1px solid #333;border-radius:20px;padding:28px;width:100%;max-width:400px;">
+                <div style="font-size:16px;font-weight:700;margin-bottom:16px;"><i class="fas fa-times-circle" style="color:var(--red);margin-right:8px;"></i>Reject Ad</div>
+                <input type="hidden" id="rejectAdId">
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--dim);text-transform:uppercase;margin-bottom:6px;">Reason for rejection</label>
+                <textarea id="rejectReason" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid #333;border-radius:10px;padding:12px;color:#fff;font-size:14px;font-family:inherit;outline:none;min-height:80px;resize:vertical;" placeholder="Tell the advertiser why their ad was rejected..."></textarea>
+                <div style="display:flex;gap:10px;margin-top:16px;">
+                    <button onclick="document.getElementById('rejectModal').style.display='none'" style="flex:1;padding:11px;background:rgba(255,255,255,0.06);border:1px solid #333;border-radius:10px;color:#fff;font-family:inherit;cursor:pointer;">Cancel</button>
+                    <button onclick="confirmReject()" style="flex:2;padding:11px;background:#ef4444;border:none;border-radius:10px;color:#fff;font-weight:700;font-family:inherit;cursor:pointer;"><i class="fas fa-times"></i> Confirm Reject</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -876,21 +954,12 @@
     // ── AUTH ──
     document.getElementById('googleSignInBtn').addEventListener('click', async () => {
         const btn = document.getElementById('googleSignInBtn');
-        btn.innerHTML = '<div class="spinner" style="border-color:rgba(243,146,0,0.3);border-left-color:var(--orange);"></div> Signing in...';
+        btn.innerHTML = '<div class="spinner" style="border-color:rgba(243,146,0,0.3);border-left-color:var(--orange);"></div> Redirecting...';
         btn.disabled = true;
-
         try {
             const provider = new firebase.auth.GoogleAuthProvider();
-            const result = await auth.signInWithPopup(provider);
-            const user = result.user;
-
-            if (user.uid !== AUTHORIZED_UID) {
-                await auth.signOut();
-                showLoginError('⛔ Access denied. This account is not authorized.');
-                btn.innerHTML = '<i class="fab fa-google"></i> Sign in with Google';
-                btn.disabled = false;
-                return;
-            }
+            provider.setCustomParameters({ prompt: 'select_account' });
+            await auth.signInWithRedirect(provider);
         } catch (e) {
             showLoginError('Sign-in failed: ' + e.message);
             btn.innerHTML = '<i class="fab fa-google"></i> Sign in with Google';
@@ -904,13 +973,26 @@
         el.classList.add('show');
     }
 
+    // Handle redirect result on page load
+    auth.getRedirectResult().then(result => {
+        if (result && result.user) {
+            const user = result.user;
+            if (user.uid !== AUTHORIZED_UID) {
+                auth.signOut();
+                showLoginError('⛔ Access denied. This account is not authorized.');
+            }
+        }
+    }).catch(e => {
+        if (e.code !== 'auth/no-current-user') {
+            showLoginError('Sign-in failed: ' + e.message);
+        }
+    });
+
     auth.onAuthStateChanged(user => {
         if (user && user.uid === AUTHORIZED_UID) {
-            // Authorized — show panel
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('mainPanel').style.display = 'block';
 
-            // Set user info
             const av = document.getElementById('userAvatar');
             if (user.photoURL) {
                 av.innerHTML = `<img src="${user.photoURL}" alt="${user.displayName}">`;
@@ -920,6 +1002,9 @@
             document.getElementById('userName').textContent = user.displayName || user.email;
 
             loadAds();
+        } else if (user && user.uid !== AUTHORIZED_UID) {
+            auth.signOut();
+            showLoginError('⛔ Access denied. This account is not authorized.');
         } else {
             document.getElementById('loginScreen').style.display = 'flex';
             document.getElementById('mainPanel').style.display = 'none';
@@ -1229,6 +1314,154 @@
     window.previewImage = previewImage;
     window.updatePreview = updatePreview;
     window.loadAds = loadAds;
+
+        // ── USER ADS MANAGEMENT ──
+        let allUserAds = [];
+        let userAdsFilter = 'pending';
+
+        async function loadUserAds() {
+            try {
+                const snap = await db.collection('userAds').orderBy('createdAt', 'desc').get();
+                allUserAds = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                updatePendingCount();
+                renderUserAdsTable();
+            } catch(e) {
+                toast('Failed to load user ads: ' + e.message, 'error');
+            }
+        }
+
+        function updatePendingCount() {
+            const pending = allUserAds.filter(a => a.status === 'pending').length;
+            document.getElementById('pendingCount').textContent = pending + ' pending';
+        }
+
+        function filterUserAds(filter) {
+            userAdsFilter = filter;
+            document.querySelectorAll('[id^="uafilt-"]').forEach(b => b.classList.remove('active'));
+            document.getElementById('uafilt-' + filter)?.classList.add('active', 'on');
+            renderUserAdsTable();
+        }
+
+        function renderUserAdsTable() {
+            const tbody = document.getElementById('userAdsTableBody');
+            let ads = allUserAds;
+            if (userAdsFilter !== 'all') ads = ads.filter(a => a.status === userAdsFilter);
+
+            if (!ads.length) {
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:30px;color:var(--dim);">
+                    ${userAdsFilter === 'pending' ? 'No pending ads 🎉' : 'No submissions found'}
+                </td></tr>`;
+                return;
+            }
+
+            const typeLabels = { ppc_native:'PPC Native', ppc_popup:'PPC Pop-up', native_duration:'Native', popup_duration:'Pop-up' };
+
+            tbody.innerHTML = ads.map(ad => {
+                const date = ad.createdAt?.toDate ? ad.createdAt.toDate().toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'2-digit'}) : '—';
+                const pkg = ad.isPPC ? (ad.totalClicks?.toLocaleString() + ' clicks') : (ad.durationLabel || '—');
+                const statusColor = { pending:'badge-scheduled', active:'badge-active', rejected:'badge-inactive', expired:'badge-expired' }[ad.status] || 'badge-expired';
+
+                return `<tr>
+                    <td>${ad.image ? `<img class="td-thumb" src="${ad.image}" onerror="this.style.display='none'">` : `<div class="td-thumb" style="background:rgba(243,146,0,0.08);display:flex;align-items:center;justify-content:center;color:var(--orange);font-size:14px;"><i class="fas fa-ad"></i></div>`}</td>
+                    <td class="td-title" title="${ad.title||''}">${ad.title||'—'}</td>
+                    <td style="color:var(--dim);font-size:12px;">${ad.username||ad.uid?.slice(0,8)||'—'}</td>
+                    <td><span class="badge native">${typeLabels[ad.adType]||ad.adType}</span></td>
+                    <td style="font-size:12px;">${pkg}</td>
+                    <td style="font-family:'Space Mono',monospace;font-size:12px;">${(ad.srcPaid||0).toFixed(4)} SRC</td>
+                    <td><span class="badge ${statusColor}">${ad.status}</span></td>
+                    <td style="font-size:12px;color:var(--dim);">${date}</td>
+                    <td>
+                        <div class="td-actions">
+                            ${ad.status === 'pending' ? `
+                            <button class="btn-edit" onclick="approveUserAd('${ad.id}')"><i class="fas fa-check"></i> Approve</button>
+                            <button class="btn-danger" onclick="openRejectModal('${ad.id}')"><i class="fas fa-times"></i> Reject</button>
+                            ` : ad.status === 'active' ? `
+                            <button class="btn-danger" onclick="deactivateUserAd('${ad.id}')">Deactivate</button>
+                            ` : `<span style="color:var(--dim);font-size:12px;">${ad.status}</span>`}
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        async function approveUserAd(adId) {
+            try {
+                await db.collection('userAds').doc(adId).update({ status: 'active', active: true });
+                toast('Ad approved and live!', 'success');
+                await loadUserAds();
+            } catch(e) { toast('Failed: ' + e.message, 'error'); }
+        }
+
+        function openRejectModal(adId) {
+            document.getElementById('rejectAdId').value = adId;
+            document.getElementById('rejectReason').value = '';
+            document.getElementById('rejectModal').style.display = 'flex';
+        }
+
+        async function confirmReject() {
+            const adId = document.getElementById('rejectAdId').value;
+            const reason = document.getElementById('rejectReason').value.trim();
+            if (!reason) { toast('Please enter a rejection reason', 'error'); return; }
+            try {
+                await db.collection('userAds').doc(adId).update({ status: 'rejected', active: false, rejectionReason: reason });
+                document.getElementById('rejectModal').style.display = 'none';
+                toast('Ad rejected', 'info');
+                await loadUserAds();
+            } catch(e) { toast('Failed: ' + e.message, 'error'); }
+        }
+
+        async function deactivateUserAd(adId) {
+            try {
+                await db.collection('userAds').doc(adId).update({ status: 'expired', active: false });
+                toast('Ad deactivated', 'info');
+                await loadUserAds();
+            } catch(e) { toast('Failed: ' + e.message, 'error'); }
+        }
+
+        // ── REVENUE ──
+        async function loadRevenue() {
+            try {
+                const snap = await db.collection('adminRevenue').orderBy('createdAt', 'desc').get();
+                const records = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+                const totalNGN = records.reduce((s, r) => s + (r.ngnAmount || 0), 0);
+                const totalSRC = records.reduce((s, r) => s + (r.srcAmount || 0), 0);
+
+                document.getElementById('revTotalNGN').textContent = '₦' + totalNGN.toLocaleString();
+                document.getElementById('revTotalSRC').textContent = totalSRC.toFixed(4);
+                document.getElementById('revTotalTx').textContent = records.length;
+
+                const typeLabels = { ppc_native:'PPC Native', ppc_popup:'PPC Pop-up', native_duration:'Native', popup_duration:'Pop-up', ad_payment:'Ad Payment' };
+                document.getElementById('revenueTableBody').innerHTML = records.length ? records.map(r => {
+                    const date = r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'}) : '—';
+                    return `<tr>
+                        <td style="font-size:12px;color:var(--dim);">${date}</td>
+                        <td style="font-size:13px;">${r.username||'—'}</td>
+                        <td><span class="badge native">${typeLabels[r.adType]||r.adType||'—'}</span></td>
+                        <td style="font-family:'Space Mono',monospace;font-size:12px;color:var(--green);">₦${(r.ngnAmount||0).toLocaleString()}</td>
+                        <td style="font-family:'Space Mono',monospace;font-size:12px;">${(r.srcAmount||0).toFixed(4)}</td>
+                    </tr>`;
+                }).join('') : '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--dim);">No revenue records yet</td></tr>';
+
+            } catch(e) { toast('Failed to load revenue: ' + e.message, 'error'); }
+        }
+
+        window.approveUserAd = approveUserAd;
+        window.openRejectModal = openRejectModal;
+        window.confirmReject = confirmReject;
+        window.deactivateUserAd = deactivateUserAd;
+        window.filterUserAds = filterUserAds;
+        window.loadUserAds = loadUserAds;
+        window.loadRevenue = loadRevenue;
+
+        // Auto-load user ads on init
+        const _origLoadAdsAdmin = window.loadAds;
+        window.loadAds = async function() {
+            await _origLoadAdsAdmin();
+            await loadUserAds();
+            await loadRevenue();
+        };
+
 </script>
 </body>
 </html>
