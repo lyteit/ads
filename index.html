@@ -21,614 +21,186 @@
             --yellow: #f59e0b;
             --grad: linear-gradient(135deg, #f39200, #ffad33);
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'DM Sans', sans-serif;
-            min-height: 100vh;
-        }
+        body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
 
         /* ── LOGIN ── */
-        .login-screen {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .login-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 48px 40px;
-            width: 100%;
-            max-width: 420px;
-            text-align: center;
-        }
-
-        .login-logo {
-            font-size: 32px;
-            font-weight: 800;
-            margin-bottom: 8px;
-            background: var(--grad);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .login-subtitle {
-            color: var(--dim);
-            font-size: 14px;
-            margin-bottom: 36px;
-        }
-
-        .login-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(243,146,0,0.1);
-            border: 1px solid rgba(243,146,0,0.25);
-            color: var(--orange);
-            border-radius: 20px;
-            padding: 5px 14px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 32px;
-        }
-
-        .google-btn {
-            width: 100%;
-            padding: 15px 24px;
-            background: var(--card2);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            color: var(--text);
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            font-family: inherit;
-            transition: all 0.2s;
-        }
-
-        .google-btn:hover {
-            border-color: var(--orange);
-            background: rgba(243,146,0,0.07);
-        }
-
+        .login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+        .login-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 48px 40px; width: 100%; max-width: 420px; text-align: center; }
+        .login-logo { font-size: 32px; font-weight: 800; margin-bottom: 8px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .login-subtitle { color: var(--dim); font-size: 14px; margin-bottom: 36px; }
+        .login-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(243,146,0,0.1); border: 1px solid rgba(243,146,0,0.25); color: var(--orange); border-radius: 20px; padding: 5px 14px; font-size: 12px; font-weight: 600; margin-bottom: 32px; }
+        .google-btn { width: 100%; padding: 15px 24px; background: var(--card2); border: 1px solid var(--border); border-radius: 14px; color: var(--text); font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; font-family: inherit; transition: all 0.2s; }
+        .google-btn:hover { border-color: var(--orange); background: rgba(243,146,0,0.07); }
         .google-btn i { color: var(--orange); font-size: 20px; }
-
-        .login-error {
-            margin-top: 16px;
-            padding: 12px 16px;
-            background: rgba(239,68,68,0.1);
-            border: 1px solid rgba(239,68,68,0.25);
-            border-radius: 10px;
-            color: var(--red);
-            font-size: 13px;
-            display: none;
-        }
-
+        .login-error { margin-top: 16px; padding: 12px 16px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25); border-radius: 10px; color: var(--red); font-size: 13px; display: none; }
         .login-error.show { display: block; }
 
         /* ── MAIN PANEL ── */
         .main-panel { display: none; }
-
-        .admin-wrap { max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; }
+        .admin-wrap { max-width: 1140px; margin: 0 auto; padding: 24px 20px 80px; }
 
         /* Header */
-        .admin-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 32px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border);
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
+        .admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 12px; }
         .header-left { display: flex; align-items: center; gap: 14px; }
-
-        .header-logo {
-            font-size: 22px;
-            font-weight: 800;
-            background: var(--grad);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .admin-badge {
-            background: var(--grad);
-            color: #000;
-            border-radius: 20px;
-            padding: 4px 12px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
+        .header-logo { font-size: 22px; font-weight: 800; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .admin-badge { background: var(--grad); color: #000; border-radius: 20px; padding: 4px 12px; font-size: 11px; font-weight: 700; }
         .header-right { display: flex; align-items: center; gap: 12px; }
-
-        .user-pill {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--card2);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 7px 14px;
-        }
-
-        .user-avatar {
-            width: 28px; height: 28px;
-            border-radius: 50%;
-            background: var(--orange);
-            display: flex; align-items: center; justify-content: center;
-            color: #000; font-weight: 700; font-size: 12px;
-            overflow: hidden; flex-shrink: 0;
-        }
-
+        .user-pill { display: flex; align-items: center; gap: 10px; background: var(--card2); border: 1px solid var(--border); border-radius: 30px; padding: 7px 14px; }
+        .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; color: #000; font-weight: 700; font-size: 12px; overflow: hidden; flex-shrink: 0; }
         .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
         .user-name { font-size: 13px; font-weight: 500; }
-
-        .signout-btn {
-            background: none;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 8px 14px;
-            color: var(--dim);
-            font-size: 13px;
-            cursor: pointer;
-            font-family: inherit;
-            display: flex; align-items: center; gap: 6px;
-            transition: all 0.2s;
-        }
-
+        .signout-btn { background: none; border: 1px solid var(--border); border-radius: 10px; padding: 8px 14px; color: var(--dim); font-size: 13px; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
         .signout-btn:hover { border-color: var(--red); color: var(--red); }
 
         /* Stats */
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 14px;
-            margin-bottom: 28px;
-        }
-
-        .stat-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
-            transition: border-color 0.2s;
-        }
-
+        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 28px; }
+        .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; transition: border-color 0.2s; }
         .stat-card:hover { border-color: rgba(243,146,0,0.3); }
-
-        .stat-icon {
-            width: 38px; height: 38px;
-            background: rgba(243,146,0,0.1);
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            color: var(--orange); font-size: 16px;
-            margin-bottom: 12px;
-        }
-
+        .stat-icon { width: 38px; height: 38px; background: rgba(243,146,0,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--orange); font-size: 16px; margin-bottom: 12px; }
         .stat-label { color: var(--dim); font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 5px; }
-        .stat-value { font-size: 26px; font-weight: 700; font-family: 'Space Mono', monospace; }
+        .stat-value { font-size: 24px; font-weight: 700; font-family: 'Space Mono', monospace; }
 
-        /* Layout */
-        .panel-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            align-items: start;
-        }
-
-        @media (max-width: 800px) {
-            .panel-grid { grid-template-columns: 1fr; }
-        }
-
-        .panel {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 24px;
-        }
-
-        .panel-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
+        /* Panels */
+        .panel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+        @media (max-width: 800px) { .panel-grid { grid-template-columns: 1fr; } }
+        .panel { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 24px; }
+        .panel-title { font-size: 16px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
         .panel-title i { color: var(--orange); }
 
         /* Form */
         .form-group { margin-bottom: 16px; }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-        }
-
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
         @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
-
-        label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--dim);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 11px 14px;
-            color: var(--text);
-            font-size: 14px;
-            font-family: inherit;
-            transition: border-color 0.2s;
-        }
-
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: var(--orange);
-            box-shadow: 0 0 0 3px rgba(243,146,0,0.12);
-        }
-
+        label { display: block; font-size: 12px; font-weight: 600; color: var(--dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+        input, textarea, select { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 10px; padding: 11px 14px; color: var(--text); font-size: 14px; font-family: inherit; transition: border-color 0.2s; }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: var(--orange); box-shadow: 0 0 0 3px rgba(243,146,0,0.12); }
         textarea { min-height: 90px; resize: vertical; }
-
         select option { background: #1a1a2e; }
-
-        .checkbox-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 12px 14px;
-        }
-
-        .checkbox-row input[type="checkbox"] {
-            width: 18px; height: 18px;
-            accent-color: var(--orange);
-            flex-shrink: 0;
-        }
-
-        .checkbox-row label {
-            margin: 0;
-            font-size: 13px;
-            font-weight: 500;
-            text-transform: none;
-            letter-spacing: 0;
-            color: var(--text);
-            cursor: pointer;
-        }
-
-        /* Image Preview */
-        .img-preview {
-            width: 100%;
-            min-height: 90px;
-            background: rgba(255,255,255,0.03);
-            border: 1px dashed var(--border);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--dim);
-            font-size: 13px;
-            overflow: hidden;
-            margin-top: 8px;
-        }
-
+        .checkbox-row { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+        .checkbox-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--orange); flex-shrink: 0; }
+        .checkbox-row label { margin: 0; font-size: 13px; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--text); cursor: pointer; }
+        .img-preview { width: 100%; min-height: 90px; background: rgba(255,255,255,0.03); border: 1px dashed var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--dim); font-size: 13px; overflow: hidden; margin-top: 8px; }
         .img-preview img { max-width: 100%; max-height: 160px; object-fit: cover; }
 
         /* Buttons */
         .btn-row { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
-
-        .btn-primary {
-            padding: 11px 22px;
-            background: var(--grad);
-            border: none;
-            border-radius: 12px;
-            color: #000;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            font-family: inherit;
-            display: flex; align-items: center; gap: 8px;
-            transition: all 0.2s;
-        }
-
+        .btn-primary { padding: 11px 22px; background: var(--grad); border: none; border-radius: 12px; color: #000; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
         .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(243,146,0,0.35); }
         .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-        .btn-secondary {
-            padding: 11px 22px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            color: var(--text);
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: inherit;
-            display: flex; align-items: center; gap: 8px;
-            transition: all 0.2s;
-        }
-
+        .btn-secondary { padding: 11px 22px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
         .btn-secondary:hover { border-color: var(--orange); color: var(--orange); }
-
-        .btn-danger {
-            padding: 7px 14px;
-            background: rgba(239,68,68,0.1);
-            border: 1px solid rgba(239,68,68,0.3);
-            border-radius: 8px;
-            color: var(--red);
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: inherit;
-            transition: all 0.2s;
-        }
-
+        .btn-danger { padding: 7px 14px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; color: var(--red); font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
         .btn-danger:hover { background: rgba(239,68,68,0.2); }
-
-        .btn-edit {
-            padding: 7px 14px;
-            background: rgba(243,146,0,0.08);
-            border: 1px solid rgba(243,146,0,0.25);
-            border-radius: 8px;
-            color: var(--orange);
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: inherit;
-            transition: all 0.2s;
-        }
-
+        .btn-edit { padding: 7px 14px; background: rgba(243,146,0,0.08); border: 1px solid rgba(243,146,0,0.25); border-radius: 8px; color: var(--orange); font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
         .btn-edit:hover { background: rgba(243,146,0,0.15); }
+        .btn-view { padding: 7px 14px; background: rgba(29,155,240,0.08); border: 1px solid rgba(29,155,240,0.25); border-radius: 8px; color: #1d9bf0; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+        .btn-view:hover { background: rgba(29,155,240,0.15); }
 
-        /* Ads Table */
-        .ads-panel {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 24px;
-            margin-top: 24px;
-        }
-
-        .ads-panel-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 18px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
+        /* Ads Panel */
+        .ads-panel { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 24px; margin-top: 24px; }
+        .ads-panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
         .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
-
         table { width: 100%; border-collapse: collapse; }
-
-        th {
-            text-align: left;
-            padding: 12px 14px;
-            background: rgba(255,255,255,0.03);
-            color: var(--dim);
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            border-bottom: 1px solid var(--border);
-            white-space: nowrap;
-        }
-
-        td {
-            padding: 14px;
-            font-size: 13px;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-            vertical-align: middle;
-        }
-
+        th { text-align: left; padding: 12px 14px; background: rgba(255,255,255,0.03); color: var(--dim); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+        td { padding: 14px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
         tr:last-child td { border-bottom: none; }
         tr:hover td { background: rgba(255,255,255,0.02); }
-
-        .td-title {
-            font-weight: 600;
-            max-width: 180px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .td-thumb {
-            width: 44px; height: 36px;
-            border-radius: 6px;
-            object-fit: cover;
-            background: var(--card2);
-            display: block;
-        }
-
-        .td-actions { display: flex; gap: 8px; align-items: center; }
+        .td-title { font-weight: 600; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .td-thumb { width: 44px; height: 36px; border-radius: 6px; object-fit: cover; background: var(--card2); display: block; }
+        .td-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 
         /* Badges */
-        .badge {
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            white-space: nowrap;
-        }
-
-        .badge-active { background: rgba(16,185,129,0.12); color: var(--green); border: 1px solid rgba(16,185,129,0.25); }
+        .badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+        .badge-active   { background: rgba(16,185,129,0.12); color: var(--green); border: 1px solid rgba(16,185,129,0.25); }
         .badge-inactive { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
-        .badge-scheduled { background: rgba(243,146,0,0.1); color: var(--orange); border: 1px solid rgba(243,146,0,0.25); }
-        .badge-expired { background: rgba(107,114,128,0.12); color: var(--dim); border: 1px solid rgba(107,114,128,0.2); }
+        .badge-scheduled{ background: rgba(243,146,0,0.1); color: var(--orange); border: 1px solid rgba(243,146,0,0.25); }
+        .badge-expired  { background: rgba(107,114,128,0.12); color: var(--dim); border: 1px solid rgba(107,114,128,0.2); }
+        .badge-pending  { background: rgba(245,158,11,0.12); color: var(--yellow); border: 1px solid rgba(245,158,11,0.25); }
 
-        /* Toggle active */
-        .toggle-active {
-            width: 36px; height: 20px;
-            border-radius: 20px;
-            border: none;
-            cursor: pointer;
-            position: relative;
-            transition: background 0.2s;
-            flex-shrink: 0;
-        }
-
-        .toggle-active::after {
-            content: '';
-            position: absolute;
-            top: 3px; left: 3px;
-            width: 14px; height: 14px;
-            background: white;
-            border-radius: 50%;
-            transition: transform 0.2s;
-        }
-
+        /* Toggle */
+        .toggle-active { width: 36px; height: 20px; border-radius: 20px; border: none; cursor: pointer; position: relative; transition: background 0.2s; flex-shrink: 0; }
+        .toggle-active::after { content: ''; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; background: white; border-radius: 50%; transition: transform 0.2s; }
         .toggle-active.on { background: var(--green); }
         .toggle-active.on::after { transform: translateX(16px); }
         .toggle-active.off { background: var(--dim); }
 
-        /* Empty state */
-        .empty-state {
-            text-align: center;
-            padding: 50px 20px;
-            color: var(--dim);
-        }
-
-        .empty-state i { font-size: 40px; margin-bottom: 14px; display: block; opacity: 0.4; }
+        /* Ad Preview card */
+        .ad-preview-card { background: rgba(243,146,0,0.04); border: 1px solid rgba(243,146,0,0.2); border-left: 3px solid var(--orange); border-radius: 14px; padding: 16px; margin-top: 20px; }
+        .ad-preview-label { font-size: 10px; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+        .ap-sponsor { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+        .ap-tag { font-size: 11px; color: var(--dim); margin-bottom: 10px; }
+        .ap-img { width: 100%; max-height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; display: none; }
+        .ap-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+        .ap-text { font-size: 12px; color: var(--dim); margin-bottom: 12px; }
+        .ap-cta { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: var(--grad); border-radius: 20px; color: #000; font-size: 12px; font-weight: 700; }
 
         /* Toast */
-        .toast-wrap {
-            position: fixed;
-            top: 20px; right: 20px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-width: 320px;
-        }
-
-        .toast {
-            background: var(--card2);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 14px 16px;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            animation: slideIn 0.3s ease;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-        }
-
+        .toast-wrap { position: fixed; top: 20px; right: 20px; z-index: 99999; display: flex; flex-direction: column; gap: 10px; max-width: 320px; }
+        .toast { background: var(--card2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; font-size: 13px; display: flex; align-items: center; gap: 10px; animation: slideIn 0.3s ease; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
         .toast.success { border-left: 4px solid var(--green); }
         .toast.error   { border-left: 4px solid var(--red); }
         .toast.info    { border-left: 4px solid var(--orange); }
         .toast.success i { color: var(--green); }
         .toast.error   i { color: var(--red); }
         .toast.info    i { color: var(--orange); }
-
         @keyframes slideIn { from { transform: translateX(110%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-        /* Ad Preview card */
-        .ad-preview-card {
-            background: rgba(243,146,0,0.04);
-            border: 1px solid rgba(243,146,0,0.2);
-            border-left: 3px solid var(--orange);
-            border-radius: 14px;
-            padding: 16px;
-            margin-top: 20px;
-        }
-
-        .ad-preview-label {
-            font-size: 10px;
-            font-weight: 700;
-            color: var(--orange);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .ap-sponsor { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
-        .ap-tag { font-size: 11px; color: var(--dim); margin-bottom: 10px; }
-
-        .ap-img {
-            width: 100%;
-            max-height: 120px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            display: none;
-        }
-
-        .ap-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
-        .ap-text { font-size: 12px; color: var(--dim); margin-bottom: 12px; }
-
-        .ap-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            background: var(--grad);
-            border-radius: 20px;
-            color: #000;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
         /* Spinner */
-        .spinner {
-            display: inline-block;
-            width: 14px; height: 14px;
-            border: 2px solid rgba(0,0,0,0.3);
-            border-left-color: #000;
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-        }
-
+        .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(0,0,0,0.3); border-left-color: #000; border-radius: 50%; animation: spin 0.7s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── AD DETAIL MODAL ── */
+        .ad-detail-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 9000; align-items: center; justify-content: center; padding: 16px; }
+        .ad-detail-overlay.show { display: flex; }
+        .ad-detail-card { background: #15171a; border: 1px solid #2f3336; border-radius: 20px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; padding: 24px; }
+        .ad-detail-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .ad-detail-title { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .ad-detail-close { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.07); border: none; color: #fff; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+        .ad-detail-close:hover { background: rgba(255,255,255,0.14); }
+        .ad-detail-image { width: 100%; border-radius: 12px; margin-bottom: 16px; max-height: 220px; object-fit: cover; display: block; border: 1px solid #2f3336; }
+        .ad-detail-row { display: flex; gap: 12px; margin-bottom: 10px; align-items: flex-start; }
+        .ad-detail-label { font-size: 11px; font-weight: 700; color: #71767b; text-transform: uppercase; letter-spacing: 0.5px; min-width: 96px; padding-top: 2px; flex-shrink: 0; }
+        .ad-detail-val { font-size: 13px; color: #fff; line-height: 1.55; flex: 1; word-break: break-word; }
+        .ad-detail-divider { height: 1px; background: #2f3336; margin: 14px 0; }
+        .ad-detail-actions { display: flex; gap: 10px; margin-top: 20px; }
+        .ad-detail-approve { flex: 1; padding: 13px; background: #00ba7c; border: none; border-radius: 10px; color: #000; font-weight: 800; font-family: inherit; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: opacity 0.2s; }
+        .ad-detail-approve:hover { opacity: 0.88; }
+        .ad-detail-reject { flex: 1; padding: 13px; background: #ef4444; border: none; border-radius: 10px; color: #fff; font-weight: 800; font-family: inherit; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: opacity 0.2s; }
+        .ad-detail-reject:hover { opacity: 0.88; }
+        .ad-detail-close-only { flex: 1; padding: 13px; background: rgba(255,255,255,0.06); border: 1px solid #333; border-radius: 10px; color: #fff; font-weight: 700; font-family: inherit; font-size: 14px; cursor: pointer; }
+
+        /* ── REJECT MODAL ── */
+        .reject-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9500; align-items: center; justify-content: center; padding: 20px; }
+        .reject-overlay.show { display: flex; }
+        .reject-card { background: #15171a; border: 1px solid #333; border-radius: 20px; padding: 28px; width: 100%; max-width: 400px; }
+        .reject-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .reject-actions { display: flex; gap: 10px; margin-top: 16px; }
+        .reject-cancel { flex: 1; padding: 12px; background: rgba(255,255,255,0.06); border: 1px solid #333; border-radius: 10px; color: #fff; font-family: inherit; cursor: pointer; font-size: 14px; }
+        .reject-confirm { flex: 2; padding: 12px; background: #ef4444; border: none; border-radius: 10px; color: #fff; font-weight: 700; font-family: inherit; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+        /* Filter tabs */
+        .filter-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+        .filter-tab { padding: 6px 14px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 20px; color: var(--dim); font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+        .filter-tab:hover { border-color: rgba(243,146,0,0.4); color: var(--orange); }
+        .filter-tab.active { background: var(--orange); border-color: var(--orange); color: #000; }
+
+        /* Revenue refund row */
+        .refund-row td { color: var(--red) !important; }
     </style>
 </head>
 <body>
 
 <div class="toast-wrap" id="toastWrap"></div>
 
-<!-- LOGIN SCREEN -->
+<!-- LOGIN -->
 <div class="login-screen" id="loginScreen">
     <div class="login-card">
         <div class="login-logo">🪙 Silranus</div>
         <div class="login-subtitle">Ads Management Panel</div>
         <div class="login-badge"><i class="fas fa-shield-alt"></i> Authorized Access Only</div>
         <button class="google-btn" id="googleSignInBtn">
-            <i class="fab fa-google"></i>
-            Sign in with Google
+            <i class="fab fa-google"></i> Sign in with Google
         </button>
         <div class="login-error" id="loginError"></div>
     </div>
@@ -636,319 +208,229 @@
 
 <!-- MAIN PANEL -->
 <div class="main-panel" id="mainPanel">
-    <div class="admin-wrap">
+<div class="admin-wrap">
 
-        <!-- Header -->
-        <div class="admin-header">
-            <div class="header-left">
-                <div class="header-logo">🪙 Silranus</div>
-                <span class="admin-badge">Ads Manager</span>
+    <!-- Header -->
+    <div class="admin-header">
+        <div class="header-left">
+            <div class="header-logo">🪙 Silranus</div>
+            <span class="admin-badge">Ads Manager</span>
+        </div>
+        <div class="header-right">
+            <div class="user-pill">
+                <div class="user-avatar" id="userAvatar">?</div>
+                <span class="user-name" id="userName">—</span>
             </div>
-            <div class="header-right">
-                <div class="user-pill">
-                    <div class="user-avatar" id="userAvatar">?</div>
-                    <span class="user-name" id="userName">—</span>
-                </div>
-                <button class="signout-btn" id="signOutBtn">
-                    <i class="fas fa-sign-out-alt"></i> Sign Out
-                </button>
+            <button class="signout-btn" id="signOutBtn"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+        </div>
+    </div>
+
+    <!-- Admin Ads Stats -->
+    <div class="stats-row">
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-layer-group"></i></div><div class="stat-label">Total Ads</div><div class="stat-value" id="statTotal">—</div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-check-circle"></i></div><div class="stat-label">Active</div><div class="stat-value" id="statActive">—</div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-eye"></i></div><div class="stat-label">Total Impressions</div><div class="stat-value" id="statImpressions">—</div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-mouse-pointer"></i></div><div class="stat-label">Total Clicks</div><div class="stat-value" id="statClicks">—</div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-percentage"></i></div><div class="stat-label">Avg CTR</div><div class="stat-value" id="statCTR">—</div></div>
+    </div>
+
+    <!-- Create / Edit Form + Live Preview -->
+    <div class="panel-grid">
+        <div class="panel">
+            <div class="panel-title"><i class="fas fa-bullhorn"></i><span id="formTitle">Create Ad Campaign</span></div>
+            <input type="hidden" id="editingAdId">
+            <div class="form-group"><label>Sponsor Name *</label><input type="text" id="adSponsor" placeholder="e.g. Busha, Cowrywise" oninput="updatePreview()"></div>
+            <div class="form-group"><label>Ad Title *</label><input type="text" id="adTitle" placeholder="Catchy headline" oninput="updatePreview()"></div>
+            <div class="form-group"><label>Ad Body Text *</label><textarea id="adText" placeholder="Short description of the offer..." oninput="updatePreview()"></textarea></div>
+            <div class="form-group">
+                <label>Image URL (optional)</label>
+                <input type="url" id="adImage" placeholder="https://..." oninput="updatePreview(); previewImage()">
+                <div class="img-preview" id="imgPreview"><i class="fas fa-image" style="font-size:24px;opacity:0.3;"></i></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Button Text *</label><input type="text" id="adBtnText" value="Learn More" oninput="updatePreview()"></div>
+                <div class="form-group"><label>Button Link *</label><input type="url" id="adBtnLink" placeholder="https://..."></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Start Date *</label><input type="datetime-local" id="adStart"></div>
+                <div class="form-group"><label>Expiry Date *</label><input type="datetime-local" id="adExpiry"></div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox-row"><input type="checkbox" id="adActive" checked><label for="adActive">Activate campaign immediately</label></div>
+            </div>
+            <div class="btn-row">
+                <button class="btn-primary" id="saveAdBtn" onclick="saveAd()"><i class="fas fa-cloud-upload-alt"></i> Create Campaign</button>
+                <button class="btn-secondary" id="cancelAdBtn" onclick="resetForm()" style="display:none;"><i class="fas fa-times"></i> Cancel</button>
             </div>
         </div>
 
-        <!-- Stats -->
-        <div class="stats-row">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-layer-group"></i></div>
-                <div class="stat-label">Total Ads</div>
-                <div class="stat-value" id="statTotal">—</div>
+        <div class="panel">
+            <div class="panel-title"><i class="fas fa-eye"></i> Live Preview</div>
+            <p style="color:var(--dim);font-size:13px;margin-bottom:16px;">This is how the ad appears in the Silranus feed.</p>
+            <div class="ad-preview-card">
+                <div class="ad-preview-label"><i class="fas fa-bullhorn"></i> Sponsored</div>
+                <div class="ap-sponsor" id="prev-sponsor">Sponsor Name</div>
+                <div class="ap-tag">Sponsored · Ad</div>
+                <img class="ap-img" id="prev-img" src="" alt="">
+                <div class="ap-title" id="prev-title">Ad Title</div>
+                <div class="ap-text" id="prev-text">Ad body text will appear here...</div>
+                <div class="ap-cta" id="prev-cta">Learn More <i class="fas fa-arrow-right"></i></div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
-                <div class="stat-label">Active</div>
-                <div class="stat-value" id="statActive">—</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-eye"></i></div>
-                <div class="stat-label">Total Impressions</div>
-                <div class="stat-value" id="statImpressions">—</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-mouse-pointer"></i></div>
-                <div class="stat-label">Total Clicks</div>
-                <div class="stat-value" id="statClicks">—</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-percentage"></i></div>
-                <div class="stat-label">Avg CTR</div>
-                <div class="stat-value" id="statCTR">—</div>
+            <div style="margin-top:20px;padding:14px;background:rgba(243,146,0,0.05);border:1px solid rgba(243,146,0,0.15);border-radius:12px;">
+                <div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:8px;">📌 Ad Tips</div>
+                <ul style="font-size:12px;color:var(--dim);line-height:1.8;padding-left:16px;">
+                    <li>Keep the title under 60 characters</li>
+                    <li>Body text: 1–2 short sentences</li>
+                    <li>Use action-oriented CTA text</li>
+                    <li>Square or wide images work best (16:9)</li>
+                    <li>Ads appear every 5 posts in the feed</li>
+                </ul>
             </div>
         </div>
+    </div>
 
-        <!-- Create / Edit Form + Live Preview -->
-        <div class="panel-grid">
+    <!-- All Admin Campaigns Table -->
+    <div class="ads-panel">
+        <div class="ads-panel-header">
+            <div class="panel-title" style="margin:0;"><i class="fas fa-list"></i> All Admin Campaigns</div>
+            <button class="btn-secondary" onclick="loadAdminAds()" style="padding:8px 16px;font-size:12px;"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th></th><th>Title</th><th>Sponsor</th><th>Status</th>
+                        <th>Impressions</th><th>Clicks</th><th>CTR</th><th>Expires</th>
+                        <th>Active</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="adsTableBody">
+                    <tr><td colspan="10" style="text-align:center;padding:40px;color:var(--dim);"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-            <!-- Form -->
-            <div class="panel">
-                <div class="panel-title">
-                    <i class="fas fa-bullhorn"></i>
-                    <span id="formTitle">Create Ad Campaign</span>
-                </div>
-
-                <input type="hidden" id="editingAdId">
-
-                <!-- Sponsor -->
-                <div class="form-group">
-                    <label>Sponsor Name *</label>
-                    <input type="text" id="adSponsor" placeholder="e.g. Busha, Cowrywise" oninput="updatePreview()">
-                </div>
-
-                <!-- Title & Text -->
-                <div class="form-group">
-                    <label>Ad Title *</label>
-                    <input type="text" id="adTitle" placeholder="Catchy headline for the ad" oninput="updatePreview()">
-                </div>
-
-                <div class="form-group">
-                    <label>Ad Body Text *</label>
-                    <textarea id="adText" placeholder="Short description of the offer..." oninput="updatePreview()"></textarea>
-                </div>
-
-                <!-- Image -->
-                <div class="form-group">
-                    <label>Image URL (optional)</label>
-                    <input type="url" id="adImage" placeholder="https://..." oninput="updatePreview(); previewImage()">
-                    <div class="img-preview" id="imgPreview">
-                        <i class="fas fa-image" style="font-size:24px;opacity:0.3;"></i>
-                    </div>
-                </div>
-
-                <!-- CTA -->
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Button Text *</label>
-                        <input type="text" id="adBtnText" value="Learn More" oninput="updatePreview()">
-                    </div>
-                    <div class="form-group">
-                        <label>Button Link *</label>
-                        <input type="url" id="adBtnLink" placeholder="https://...">
-                    </div>
-                </div>
-
-                <!-- Dates -->
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Start Date *</label>
-                        <input type="datetime-local" id="adStart">
-                    </div>
-                    <div class="form-group">
-                        <label>Expiry Date *</label>
-                        <input type="datetime-local" id="adExpiry">
-                    </div>
-                </div>
-
-                <!-- Active toggle -->
-                <div class="form-group">
-                    <div class="checkbox-row">
-                        <input type="checkbox" id="adActive" checked>
-                        <label for="adActive">Activate campaign immediately</label>
-                    </div>
-                </div>
-
-                <div class="btn-row">
-                    <button class="btn-primary" id="saveAdBtn" onclick="saveAd()">
-                        <i class="fas fa-cloud-upload-alt"></i> Create Campaign
-                    </button>
-                    <button class="btn-secondary" id="cancelAdBtn" onclick="resetForm()" style="display:none;">
-                        <i class="fas fa-times"></i> Cancel
-                    </button>
-                </div>
+    <!-- User Ad Submissions -->
+    <div class="ads-panel">
+        <div class="ads-panel-header">
+            <div class="panel-title" style="margin:0;">
+                <i class="fas fa-inbox" style="color:var(--yellow);"></i>
+                User Ad Submissions
+                <span id="pendingBadge" style="background:rgba(245,158,11,0.15);color:var(--yellow);border:1px solid rgba(245,158,11,0.3);border-radius:20px;padding:3px 10px;font-size:12px;margin-left:8px;">0 pending</span>
             </div>
-
-            <!-- Live Preview -->
-            <div class="panel">
-                <div class="panel-title">
-                    <i class="fas fa-eye"></i> Live Preview
+            <div style="display:flex;gap:8px;align-items:center;">
+                <div class="filter-tabs" id="userAdsFilterTabs">
+                    <button class="filter-tab active" onclick="filterUserAds('pending')">Pending</button>
+                    <button class="filter-tab" onclick="filterUserAds('active')">Live</button>
+                    <button class="filter-tab" onclick="filterUserAds('rejected')">Rejected</button>
+                    <button class="filter-tab" onclick="filterUserAds('all')">All</button>
                 </div>
-                <p style="color:var(--dim);font-size:13px;margin-bottom:16px;">This is how the ad will appear in the Silranus feed.</p>
-
-                <div class="ad-preview-card">
-                    <div class="ad-preview-label"><i class="fas fa-bullhorn"></i> Sponsored</div>
-                    <div class="ap-sponsor" id="prev-sponsor">Sponsor Name</div>
-                    <div class="ap-tag">Sponsored · Ad</div>
-                    <img class="ap-img" id="prev-img" src="" alt="">
-                    <div class="ap-title" id="prev-title">Ad Title</div>
-                    <div class="ap-text" id="prev-text">Ad body text will appear here...</div>
-                    <div class="ap-cta" id="prev-cta">
-                        Learn More <i class="fas fa-arrow-right"></i>
-                    </div>
-                </div>
-
-                <!-- Tips -->
-                <div style="margin-top:20px;padding:14px;background:rgba(243,146,0,0.05);border:1px solid rgba(243,146,0,0.15);border-radius:12px;">
-                    <div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:8px;">📌 Ad Tips</div>
-                    <ul style="font-size:12px;color:var(--dim);line-height:1.8;padding-left:16px;">
-                        <li>Keep the title under 60 characters</li>
-                        <li>Body text should be 1–2 short sentences</li>
-                        <li>Use a direct, action-oriented CTA button text</li>
-                        <li>Square or wide images work best (16:9)</li>
-                        <li>Ads appear every 5 posts in the For You feed</li>
-                    </ul>
-                </div>
+                <button class="btn-secondary" onclick="loadUserAds()" style="padding:8px 12px;font-size:12px;"><i class="fas fa-sync-alt"></i></button>
             </div>
         </div>
-
-        <!-- Ads Table -->
-        <div class="ads-panel">
-            <div class="ads-panel-header">
-                <div class="panel-title" style="margin:0;">
-                    <i class="fas fa-list"></i> All Campaigns
-                </div>
-                <button class="btn-secondary" onclick="loadAds()" style="padding:8px 16px;font-size:12px;">
-                    <i class="fas fa-sync-alt"></i> Refresh
-                </button>
-            </div>
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Title</th>
-                            <th>Sponsor</th>
-                            <th>Status</th>
-                            <th>Impressions</th>
-                            <th>Clicks</th>
-                            <th>CTR</th>
-                            <th>Expires</th>
-                            <th>Active</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="adsTableBody">
-                        <tr><td colspan="10" style="text-align:center;padding:40px;color:var(--dim);">
-                            <i class="fas fa-circle-notch fa-spin"></i> Loading...
-                        </td></tr>
-                    </tbody>
-                </table>
-            </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th></th><th>Title</th><th>Advertiser</th><th>Type</th>
+                        <th>Package</th><th>SRC Paid</th><th>Status</th><th>Submitted</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="userAdsTableBody">
+                    <tr><td colspan="9" style="text-align:center;padding:30px;color:var(--dim);"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td></tr>
+                </tbody>
+            </table>
         </div>
+    </div>
 
-
-
-        <!-- User-Submitted Ads (Pending Review) -->
-        <div class="ads-panel" style="margin-top:20px;">
-            <div class="ads-panel-header">
-                <div class="panel-title" style="margin:0;">
-                    <i class="fas fa-inbox" style="color:#f59e0b;"></i> User Ad Submissions
-                    <span id="pendingCount" style="background:rgba(245,158,11,0.15);color:#f59e0b;border:1px solid rgba(245,158,11,0.3);border-radius:20px;padding:3px 10px;font-size:12px;margin-left:8px;">0 pending</span>
-                </div>
-                <div style="display:flex;gap:8px;">
-                    <button class="btn-secondary" onclick="filterUserAds('pending')" id="uafilt-pending" style="padding:8px 14px;font-size:11px;border-color:rgba(245,158,11,0.4);color:#f59e0b;">Pending</button>
-                    <button class="btn-secondary" onclick="filterUserAds('all')" id="uafilt-all" style="padding:8px 14px;font-size:11px;">All</button>
-                    <button class="btn-secondary" onclick="loadUserAds()" style="padding:8px 14px;font-size:11px;"><i class="fas fa-sync-alt"></i></button>
-                </div>
-            </div>
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Title</th>
-                            <th>Advertiser</th>
-                            <th>Type</th>
-                            <th>Package</th>
-                            <th>SRC Paid</th>
-                            <th>Status</th>
-                            <th>Submitted</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="userAdsTableBody">
-                        <tr><td colspan="9" style="text-align:center;padding:30px;color:var(--dim);">
-                            <i class="fas fa-circle-notch fa-spin"></i> Loading...
-                        </td></tr>
-                    </tbody>
-                </table>
-            </div>
+    <!-- Revenue Dashboard -->
+    <div class="ads-panel">
+        <div class="ads-panel-header">
+            <div class="panel-title" style="margin:0;"><i class="fas fa-coins" style="color:var(--green);"></i> Revenue Dashboard</div>
+            <button class="btn-secondary" onclick="loadRevenue()" style="padding:8px 14px;font-size:12px;"><i class="fas fa-sync-alt"></i> Refresh</button>
         </div>
-
-        <!-- Revenue Dashboard -->
-        <div class="ads-panel" style="margin-top:20px;">
-            <div class="ads-panel-header">
-                <div class="panel-title" style="margin:0;">
-                    <i class="fas fa-coins" style="color:var(--green);"></i> Revenue Dashboard
-                </div>
-                <button class="btn-secondary" onclick="loadRevenue()" style="padding:8px 14px;font-size:12px;"><i class="fas fa-sync-alt"></i> Refresh</button>
-            </div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:20px;" id="revenueStats">
-                <div class="stat-card"><div class="stat-icon"><i class="fas fa-naira-sign"></i></div><div class="stat-label">Total Revenue (NGN)</div><div class="stat-value" id="revTotalNGN">—</div></div>
-                <div class="stat-card"><div class="stat-icon"><i class="fas fa-coins"></i></div><div class="stat-label">Total Revenue (SRC)</div><div class="stat-value" id="revTotalSRC">—</div></div>
-                <div class="stat-card"><div class="stat-icon"><i class="fas fa-file-invoice"></i></div><div class="stat-label">Total Transactions</div><div class="stat-value" id="revTotalTx">—</div></div>
-            </div>
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr><th>Date</th><th>Advertiser</th><th>Ad Type</th><th>NGN</th><th>SRC</th></tr>
-                    </thead>
-                    <tbody id="revenueTableBody">
-                        <tr><td colspan="5" style="text-align:center;padding:30px;color:var(--dim);">Click Refresh to load revenue data</td></tr>
-                    </tbody>
-                </table>
-            </div>
+        <div class="stats-row" style="margin-bottom:20px;">
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-money-bill-wave"></i></div><div class="stat-label">Total Revenue (NGN)</div><div class="stat-value" id="revTotalNGN">—</div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-coins"></i></div><div class="stat-label">Total Revenue (SRC)</div><div class="stat-value" id="revTotalSRC">—</div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-receipt"></i></div><div class="stat-label">Transactions</div><div class="stat-value" id="revTotalTx">—</div></div>
         </div>
-
-        <!-- Reject Reason Modal -->
-        <div id="rejectModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:9999;align-items:center;justify-content:center;padding:20px;">
-            <div style="background:#15171a;border:1px solid #333;border-radius:20px;padding:28px;width:100%;max-width:400px;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:16px;"><i class="fas fa-times-circle" style="color:var(--red);margin-right:8px;"></i>Reject Ad</div>
-                <input type="hidden" id="rejectAdId">
-                <label style="display:block;font-size:12px;font-weight:600;color:var(--dim);text-transform:uppercase;margin-bottom:6px;">Reason for rejection</label>
-                <textarea id="rejectReason" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid #333;border-radius:10px;padding:12px;color:#fff;font-size:14px;font-family:inherit;outline:none;min-height:80px;resize:vertical;" placeholder="Tell the advertiser why their ad was rejected..."></textarea>
-                <div style="display:flex;gap:10px;margin-top:16px;">
-                    <button onclick="document.getElementById('rejectModal').style.display='none'" style="flex:1;padding:11px;background:rgba(255,255,255,0.06);border:1px solid #333;border-radius:10px;color:#fff;font-family:inherit;cursor:pointer;">Cancel</button>
-                    <button onclick="confirmReject()" style="flex:2;padding:11px;background:#ef4444;border:none;border-radius:10px;color:#fff;font-weight:700;font-family:inherit;cursor:pointer;"><i class="fas fa-times"></i> Confirm Reject</button>
-                </div>
-            </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>Date</th><th>Advertiser</th><th>Type</th><th>NGN Amount</th><th>SRC Amount</th><th>Note</th></tr>
+                </thead>
+                <tbody id="revenueTableBody">
+                    <tr><td colspan="6" style="text-align:center;padding:30px;color:var(--dim);">Click Refresh to load revenue</td></tr>
+                </tbody>
+            </table>
         </div>
+    </div>
 
+</div><!-- end admin-wrap -->
+</div><!-- end main-panel -->
+
+<!-- ── AD DETAIL MODAL ── -->
+<div class="ad-detail-overlay" id="adDetailOverlay">
+    <div class="ad-detail-card">
+        <div class="ad-detail-header">
+            <div class="ad-detail-title"><i class="fas fa-eye" style="color:var(--orange);"></i> Ad Details</div>
+            <button class="ad-detail-close" onclick="closeAdDetail()"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="adDetailBody"></div>
+        <div class="ad-detail-actions" id="adDetailActions"></div>
     </div>
 </div>
 
-<!-- Firebase -->
+<!-- ── REJECT MODAL ── -->
+<div class="reject-overlay" id="rejectOverlay">
+    <div class="reject-card">
+        <div class="reject-title"><i class="fas fa-times-circle" style="color:var(--red);"></i> Reject & Refund Ad</div>
+        <input type="hidden" id="rejectAdId">
+        <label>Reason for rejection *</label>
+        <textarea id="rejectReason" style="margin-top:6px;background:rgba(255,255,255,0.05);border:1px solid #333;border-radius:10px;padding:12px;color:#fff;font-size:14px;font-family:inherit;outline:none;min-height:90px;resize:vertical;width:100%;" placeholder="Explain why the ad was rejected. This will be shown to the advertiser."></textarea>
+        <p style="font-size:12px;color:var(--green);margin-top:8px;"><i class="fas fa-undo"></i> The advertiser's SRC will be automatically refunded.</p>
+        <div class="reject-actions">
+            <button class="reject-cancel" onclick="closeRejectModal()">Cancel</button>
+            <button class="reject-confirm" id="rejectConfirmBtn" onclick="confirmReject()"><i class="fas fa-times"></i> Confirm Reject</button>
+        </div>
+    </div>
+</div>
+
+<!-- Firebase compat SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
 <script>
-    // ── FIREBASE CONFIG ──
-    const firebaseConfig = {
+    // ── FIREBASE ──
+    firebase.initializeApp({
         apiKey: "AIzaSyBsCuAJq8sC8i9yZV8E51v11LDTCUQP_ak",
         authDomain: "silranus-e323c.firebaseapp.com",
         projectId: "silranus-e323c",
         storageBucket: "silranus-e323c.firebasestorage.app",
         messagingSenderId: "586849059267",
         appId: "1:586849059267:web:d5986d03f2735e4d77bd76"
-    };
-
-    firebase.initializeApp(firebaseConfig);
+    });
     const auth = firebase.auth();
     const db   = firebase.firestore();
 
-    // ── AUTHORIZED USER ──
     const AUTHORIZED_UID = 'WopLYvR8HbSZt8Os6oy6ODh75yh2';
 
     // ── STATE ──
-    let editingAdId = null;
-    let allAds = [];
+    let allAdminAds = [];
+    let allUserAds  = [];
+    let userAdsFilter = 'pending';
 
     // ── TOAST ──
     function toast(msg, type = 'info') {
         const wrap = document.getElementById('toastWrap');
         const el = document.createElement('div');
         el.className = `toast ${type}`;
-        const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
-        el.innerHTML = `<i class="fas ${icons[type]}"></i><span>${msg}</span>`;
+        const icons = { success:'fa-check-circle', error:'fa-exclamation-circle', info:'fa-info-circle' };
+        el.innerHTML = `<i class="fas ${icons[type]||'fa-info-circle'}"></i><span>${msg}</span>`;
         wrap.appendChild(el);
-        setTimeout(() => { el.style.opacity='0'; el.style.transition='opacity 0.3s'; setTimeout(()=>el.remove(),300); }, 4000);
+        setTimeout(() => { el.style.opacity='0'; el.style.transition='opacity 0.3s'; setTimeout(()=>el.remove(),300); }, 4500);
     }
 
     // ── AUTH ──
@@ -963,15 +445,12 @@
             if (result.user.uid !== AUTHORIZED_UID) {
                 await auth.signOut();
                 showLoginError('⛔ Access denied. This account is not authorized.');
-                btn.innerHTML = '<i class="fab fa-google"></i> Sign in with Google';
-                btn.disabled = false;
             }
-            // onAuthStateChanged will handle showing the panel
         } catch (e) {
-            // Silently reset if user just closed the popup
             if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') {
                 showLoginError('Sign-in failed: ' + e.message);
             }
+        } finally {
             btn.innerHTML = '<i class="fab fa-google"></i> Sign in with Google';
             btn.disabled = false;
         }
@@ -987,19 +466,13 @@
         if (user && user.uid === AUTHORIZED_UID) {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('mainPanel').style.display = 'block';
-
             const av = document.getElementById('userAvatar');
-            if (user.photoURL) {
-                av.innerHTML = `<img src="${user.photoURL}" alt="${user.displayName}">`;
-            } else {
-                av.textContent = (user.displayName || user.email || 'A')[0].toUpperCase();
-            }
+            av.innerHTML = user.photoURL ? `<img src="${user.photoURL}">` : (user.displayName||'A')[0].toUpperCase();
             document.getElementById('userName').textContent = user.displayName || user.email;
-
-            loadAds();
-        } else if (user && user.uid !== AUTHORIZED_UID) {
+            loadAll();
+        } else if (user) {
             auth.signOut();
-            showLoginError('⛔ Access denied. This account is not authorized.');
+            showLoginError('⛔ Access denied.');
         } else {
             document.getElementById('loginScreen').style.display = 'flex';
             document.getElementById('mainPanel').style.display = 'none';
@@ -1008,455 +481,522 @@
 
     document.getElementById('signOutBtn').addEventListener('click', () => auth.signOut());
 
-    // ── LOAD ADS ──
-    async function loadAds() {
+    async function loadAll() {
+        await Promise.all([loadAdminAds(), loadUserAds(), loadRevenue()]);
+    }
+
+    // ══════════════════════════════════════════
+    // ADMIN ADS (ads collection)
+    // ══════════════════════════════════════════
+
+    async function loadAdminAds() {
         try {
             const snap = await db.collection('ads').orderBy('createdAt', 'desc').get();
-            allAds = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-            updateStats();
-            renderTable();
+            allAdminAds = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            updateAdminStats();
+            renderAdminTable();
         } catch (e) {
             console.error(e);
-            toast('Failed to load ads: ' + e.message, 'error');
-            document.getElementById('adsTableBody').innerHTML =
-                `<tr><td colspan="10" style="text-align:center;padding:40px;color:var(--red);">Error loading ads</td></tr>`;
+            toast('Failed to load campaigns: ' + e.message, 'error');
         }
     }
 
-    // ── STATS ──
-    function updateStats() {
+    function updateAdminStats() {
         const now = new Date();
-        const active = allAds.filter(a => {
+        const active = allAdminAds.filter(a => {
             if (!a.active) return false;
             if (a.expiryDate && new Date(a.expiryDate) < now) return false;
             if (a.startDate && new Date(a.startDate) > now) return false;
             return true;
         }).length;
-
-        const totalImp = allAds.reduce((s, a) => s + (a.impressions || 0), 0);
-        const totalClk = allAds.reduce((s, a) => s + (a.clicks || 0), 0);
-        const ctr = totalImp > 0 ? ((totalClk / totalImp) * 100).toFixed(2) : '0.00';
-
-        document.getElementById('statTotal').textContent      = allAds.length;
-        document.getElementById('statActive').textContent     = active;
+        const totalImp = allAdminAds.reduce((s,a) => s+(a.impressions||0), 0);
+        const totalClk = allAdminAds.reduce((s,a) => s+(a.clicks||0), 0);
+        const ctr = totalImp > 0 ? ((totalClk/totalImp)*100).toFixed(2) : '0.00';
+        document.getElementById('statTotal').textContent       = allAdminAds.length;
+        document.getElementById('statActive').textContent      = active;
         document.getElementById('statImpressions').textContent = totalImp.toLocaleString();
-        document.getElementById('statClicks').textContent     = totalClk.toLocaleString();
-        document.getElementById('statCTR').textContent        = ctr + '%';
+        document.getElementById('statClicks').textContent      = totalClk.toLocaleString();
+        document.getElementById('statCTR').textContent         = ctr + '%';
     }
 
-    // ── RENDER TABLE ──
-    function renderTable() {
+    function renderAdminTable() {
         const tbody = document.getElementById('adsTableBody');
-        if (!allAds.length) {
-            tbody.innerHTML = `<tr><td colspan="10"><div class="empty-state">
-                <i class="fas fa-bullhorn"></i>
-                <div>No ad campaigns yet</div>
-                <div style="font-size:12px;margin-top:6px;">Create your first campaign using the form above.</div>
-            </div></td></tr>`;
+        if (!allAdminAds.length) {
+            tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:40px;color:var(--dim);">
+                <i class="fas fa-bullhorn" style="font-size:32px;opacity:0.2;display:block;margin-bottom:10px;"></i>No campaigns yet
+            </td></tr>`;
             return;
         }
-
         const now = new Date();
-        tbody.innerHTML = allAds.map(ad => {
-            const imp = ad.impressions || 0;
-            const clk = ad.clicks || 0;
-            const ctr = imp > 0 ? ((clk / imp) * 100).toFixed(1) + '%' : '—';
-
-            // Status logic
-            let statusBadge;
-            if (!ad.active) {
-                statusBadge = '<span class="badge badge-inactive">Inactive</span>';
-            } else if (ad.expiryDate && new Date(ad.expiryDate) < now) {
-                statusBadge = '<span class="badge badge-expired">Expired</span>';
-            } else if (ad.startDate && new Date(ad.startDate) > now) {
-                statusBadge = '<span class="badge badge-scheduled">Scheduled</span>';
-            } else {
-                statusBadge = '<span class="badge badge-active">Live</span>';
-            }
-
-            const expiry = ad.expiryDate
-                ? new Date(ad.expiryDate).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'2-digit' })
-                : '—';
-
-            const isOn = ad.active && !(ad.expiryDate && new Date(ad.expiryDate) < now);
-
+        tbody.innerHTML = allAdminAds.map(ad => {
+            const imp = ad.impressions||0, clk = ad.clicks||0;
+            const ctr = imp > 0 ? ((clk/imp)*100).toFixed(1)+'%' : '—';
+            let badge;
+            if (!ad.active) badge = '<span class="badge badge-inactive">Inactive</span>';
+            else if (ad.expiryDate && new Date(ad.expiryDate) < now) badge = '<span class="badge badge-expired">Expired</span>';
+            else if (ad.startDate && new Date(ad.startDate) > now) badge = '<span class="badge badge-scheduled">Scheduled</span>';
+            else badge = '<span class="badge badge-active">Live</span>';
+            const expiry = ad.expiryDate ? new Date(ad.expiryDate).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'}) : '—';
             return `<tr>
-                <td>${ad.image
-                    ? `<img class="td-thumb" src="${ad.image}" onerror="this.style.display='none'">`
-                    : `<div class="td-thumb" style="background:rgba(243,146,0,0.08);display:flex;align-items:center;justify-content:center;color:var(--orange);font-size:14px;"><i class="fas fa-image"></i></div>`
-                }</td>
-                <td class="td-title" title="${ad.title || ''}">${ad.title || '—'}</td>
-                <td style="color:var(--dim);font-size:12px;">${ad.sponsor || '—'}</td>
-                <td>${statusBadge}</td>
+                <td>${ad.image ? `<img class="td-thumb" src="${ad.image}" onerror="this.style.display='none'">` : `<div class="td-thumb" style="background:rgba(243,146,0,0.07);display:flex;align-items:center;justify-content:center;color:var(--orange);"><i class="fas fa-image"></i></div>`}</td>
+                <td class="td-title" title="${ad.title||''}">${ad.title||'—'}</td>
+                <td style="color:var(--dim);font-size:12px;">${ad.sponsor||'—'}</td>
+                <td>${badge}</td>
                 <td style="font-family:'Space Mono',monospace;font-size:12px;">${imp.toLocaleString()}</td>
                 <td style="font-family:'Space Mono',monospace;font-size:12px;">${clk.toLocaleString()}</td>
                 <td style="font-family:'Space Mono',monospace;font-size:12px;">${ctr}</td>
                 <td style="font-size:12px;color:var(--dim);">${expiry}</td>
-                <td>
-                    <button class="toggle-active ${ad.active ? 'on' : 'off'}" 
-                        onclick="toggleActive('${ad.id}', ${!ad.active})" 
-                        title="${ad.active ? 'Deactivate' : 'Activate'}">
-                    </button>
-                </td>
-                <td>
-                    <div class="td-actions">
-                        <button class="btn-edit" onclick="editAd('${ad.id}')">
-                            <i class="fas fa-pen"></i> Edit
-                        </button>
-                        <button class="btn-danger" onclick="deleteAd('${ad.id}')">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </div>
-                </td>
+                <td><button class="toggle-active ${ad.active?'on':'off'}" onclick="toggleAdminAd('${ad.id}',${!ad.active})"></button></td>
+                <td><div class="td-actions">
+                    <button class="btn-edit" onclick="editAdminAd('${ad.id}')"><i class="fas fa-pen"></i> Edit</button>
+                    <button class="btn-danger" onclick="deleteAdminAd('${ad.id}')"><i class="fas fa-trash-alt"></i></button>
+                </div></td>
             </tr>`;
         }).join('');
     }
 
-    // ── SAVE AD ──
     async function saveAd() {
-        const sponsor    = document.getElementById('adSponsor').value.trim();
-        const title      = document.getElementById('adTitle').value.trim();
-        const text       = document.getElementById('adText').value.trim();
-        const image      = document.getElementById('adImage').value.trim();
-        const btnText    = document.getElementById('adBtnText').value.trim();
-        const btnLink    = document.getElementById('adBtnLink').value.trim();
+        const sponsor = document.getElementById('adSponsor').value.trim();
+        const title   = document.getElementById('adTitle').value.trim();
+        const text    = document.getElementById('adText').value.trim();
+        const image   = document.getElementById('adImage').value.trim();
+        const btnText = document.getElementById('adBtnText').value.trim();
+        const btnLink = document.getElementById('adBtnLink').value.trim();
         const startDate  = document.getElementById('adStart').value;
         const expiryDate = document.getElementById('adExpiry').value;
-        const active     = document.getElementById('adActive').checked;
-        const editingId  = document.getElementById('editingAdId').value;
+        const active  = document.getElementById('adActive').checked;
+        const editId  = document.getElementById('editingAdId').value;
 
-        if (!sponsor)   return toast('Sponsor name is required', 'error');
-        if (!title)     return toast('Ad title is required', 'error');
-        if (!text)      return toast('Ad body text is required', 'error');
-        if (!btnText)   return toast('Button text is required', 'error');
-        if (!btnLink)   return toast('Button link is required', 'error');
-        if (!startDate) return toast('Start date is required', 'error');
-        if (!expiryDate)return toast('Expiry date is required', 'error');
-
-        const start  = new Date(startDate);
-        const expiry = new Date(expiryDate);
-        if (expiry <= start) return toast('Expiry date must be after start date', 'error');
+        if (!sponsor)    return toast('Sponsor name required', 'error');
+        if (!title)      return toast('Ad title required', 'error');
+        if (!text)       return toast('Ad body text required', 'error');
+        if (!btnText)    return toast('Button text required', 'error');
+        if (!btnLink)    return toast('Button link required', 'error');
+        if (!startDate)  return toast('Start date required', 'error');
+        if (!expiryDate) return toast('Expiry date required', 'error');
+        if (new Date(expiryDate) <= new Date(startDate)) return toast('Expiry must be after start date', 'error');
 
         const btn = document.getElementById('saveAdBtn');
         btn.disabled = true;
         btn.innerHTML = '<div class="spinner"></div> Saving...';
 
-        const adData = {
-            type: 'native',
-            sponsor,
-            title,
-            text,
-            image: image || null,
-            buttonText: btnText,
-            buttonLink: btnLink,
-            startDate: start.toISOString(),
-            expiryDate: expiry.toISOString(),
-            active,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        const data = {
+            type: 'native', sponsor, title, text,
+            image: image || null, buttonText: btnText, buttonLink: btnLink,
+            startDate: new Date(startDate).toISOString(),
+            expiryDate: new Date(expiryDate).toISOString(),
+            active, updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         };
 
         try {
-            if (editingId) {
-                await db.collection('ads').doc(editingId).update(adData);
-                toast('Campaign updated successfully!', 'success');
+            if (editId) {
+                await db.collection('ads').doc(editId).update(data);
+                toast('Campaign updated!', 'success');
             } else {
-                adData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-                adData.impressions = 0;
-                adData.clicks = 0;
-                await db.collection('ads').add(adData);
-                toast('Campaign created successfully!', 'success');
+                data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                data.impressions = 0; data.clicks = 0;
+                await db.collection('ads').add(data);
+                toast('Campaign created!', 'success');
             }
-
             resetForm();
-            await loadAds();
-
+            await loadAdminAds();
         } catch (e) {
-            console.error(e);
-            toast('Failed to save campaign: ' + e.message, 'error');
+            toast('Failed to save: ' + e.message, 'error');
         } finally {
             btn.disabled = false;
-            btn.innerHTML = editingId
-                ? '<i class="fas fa-cloud-upload-alt"></i> Update Campaign'
-                : '<i class="fas fa-cloud-upload-alt"></i> Create Campaign';
+            btn.innerHTML = editId ? '<i class="fas fa-cloud-upload-alt"></i> Update Campaign' : '<i class="fas fa-cloud-upload-alt"></i> Create Campaign';
         }
     }
 
-    // ── EDIT AD ──
-    async function editAd(adId) {
-        try {
-            const snap = await db.collection('ads').doc(adId).get();
-            if (!snap.exists) return toast('Ad not found', 'error');
-            const ad = snap.data();
-
-            document.getElementById('adSponsor').value = ad.sponsor || '';
-            document.getElementById('adTitle').value   = ad.title || '';
-            document.getElementById('adText').value    = ad.text || '';
-            document.getElementById('adImage').value   = ad.image || '';
-            document.getElementById('adBtnText').value = ad.buttonText || 'Learn More';
-            document.getElementById('adBtnLink').value = ad.buttonLink || '';
-            document.getElementById('adActive').checked = ad.active !== false;
-            document.getElementById('editingAdId').value = adId;
-
-            if (ad.startDate)  document.getElementById('adStart').value  = new Date(ad.startDate).toISOString().slice(0,16);
-            if (ad.expiryDate) document.getElementById('adExpiry').value = new Date(ad.expiryDate).toISOString().slice(0,16);
-
-            previewImage();
-            updatePreview();
-
-            editingAdId = adId;
-            document.getElementById('formTitle').textContent = 'Edit Ad Campaign';
-            document.getElementById('saveAdBtn').innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Update Campaign';
-            document.getElementById('cancelAdBtn').style.display = 'flex';
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            toast('Ad loaded for editing', 'info');
-
-        } catch (e) {
-            toast('Error loading ad: ' + e.message, 'error');
-        }
+    async function editAdminAd(id) {
+        const snap = await db.collection('ads').doc(id).get();
+        if (!snap.exists) return toast('Ad not found', 'error');
+        const ad = snap.data();
+        document.getElementById('adSponsor').value = ad.sponsor||'';
+        document.getElementById('adTitle').value   = ad.title||'';
+        document.getElementById('adText').value    = ad.text||'';
+        document.getElementById('adImage').value   = ad.image||'';
+        document.getElementById('adBtnText').value = ad.buttonText||'Learn More';
+        document.getElementById('adBtnLink').value = ad.buttonLink||'';
+        document.getElementById('adActive').checked = ad.active !== false;
+        document.getElementById('editingAdId').value = id;
+        if (ad.startDate)  document.getElementById('adStart').value  = new Date(ad.startDate).toISOString().slice(0,16);
+        if (ad.expiryDate) document.getElementById('adExpiry').value = new Date(ad.expiryDate).toISOString().slice(0,16);
+        previewImage(); updatePreview();
+        document.getElementById('formTitle').textContent = 'Edit Ad Campaign';
+        document.getElementById('saveAdBtn').innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Update Campaign';
+        document.getElementById('cancelAdBtn').style.display = 'flex';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        toast('Ad loaded for editing', 'info');
     }
 
-    // ── DELETE AD ──
-    async function deleteAd(adId) {
-        const ad = allAds.find(a => a.id === adId);
-        if (!ad) return;
-
-        // Use app-style confirm instead of browser confirm
-        if (!confirm(`Delete "${ad.title}"?\n\nThis will permanently remove the campaign and all its stats.`)) return;
-
+    async function deleteAdminAd(id) {
+        const ad = allAdminAds.find(a => a.id === id);
+        if (!confirm(`Delete "${ad?.title}"?\n\nThis permanently removes the campaign and all stats.`)) return;
         try {
-            await db.collection('ads').doc(adId).delete();
+            await db.collection('ads').doc(id).delete();
             toast('Campaign deleted', 'info');
-            await loadAds();
-        } catch (e) {
-            toast('Failed to delete: ' + e.message, 'error');
-        }
+            await loadAdminAds();
+        } catch (e) { toast('Failed to delete: ' + e.message, 'error'); }
     }
 
-    // ── TOGGLE ACTIVE ──
-    async function toggleActive(adId, newState) {
+    async function toggleAdminAd(id, newState) {
         try {
-            await db.collection('ads').doc(adId).update({ active: newState });
+            await db.collection('ads').doc(id).update({ active: newState });
             toast(newState ? 'Campaign activated' : 'Campaign deactivated', 'info');
-            await loadAds();
-        } catch (e) {
-            toast('Failed to update status', 'error');
-        }
+            await loadAdminAds();
+        } catch (e) { toast('Failed to update status', 'error'); }
     }
 
-    // ── RESET FORM ──
     function resetForm() {
-        document.getElementById('adSponsor').value  = '';
-        document.getElementById('adTitle').value    = '';
-        document.getElementById('adText').value     = '';
-        document.getElementById('adImage').value    = '';
-        document.getElementById('adBtnText').value  = 'Learn More';
-        document.getElementById('adBtnLink').value  = '';
-        document.getElementById('adStart').value    = '';
-        document.getElementById('adExpiry').value   = '';
+        ['adSponsor','adTitle','adText','adImage','adBtnLink'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('adBtnText').value = 'Learn More';
+        document.getElementById('adStart').value = '';
+        document.getElementById('adExpiry').value = '';
         document.getElementById('adActive').checked = true;
         document.getElementById('editingAdId').value = '';
-
         document.getElementById('imgPreview').innerHTML = '<i class="fas fa-image" style="font-size:24px;opacity:0.3;"></i>';
-
-        editingAdId = null;
         document.getElementById('formTitle').textContent = 'Create Ad Campaign';
         document.getElementById('saveAdBtn').innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Create Campaign';
         document.getElementById('cancelAdBtn').style.display = 'none';
-
         updatePreview();
     }
 
-    // ── IMAGE PREVIEW ──
     function previewImage() {
         const url = document.getElementById('adImage').value.trim();
         const wrap = document.getElementById('imgPreview');
-        if (url) {
-            wrap.innerHTML = `<img src="${url}" alt="preview" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-image-slash\\' style=\\'font-size:24px;opacity:0.3;\\'></i>'">`;
-        } else {
-            wrap.innerHTML = '<i class="fas fa-image" style="font-size:24px;opacity:0.3;"></i>';
-        }
+        wrap.innerHTML = url ? `<img src="${url}" alt="preview" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-image-slash\\' style=\\'font-size:24px;opacity:0.3;\\'></i>'">` : '<i class="fas fa-image" style="font-size:24px;opacity:0.3;"></i>';
     }
 
-    // ── LIVE PREVIEW ──
     function updatePreview() {
         const sponsor = document.getElementById('adSponsor').value.trim() || 'Sponsor Name';
         const title   = document.getElementById('adTitle').value.trim()   || 'Ad Title';
         const text    = document.getElementById('adText').value.trim()    || 'Ad body text will appear here...';
         const btnText = document.getElementById('adBtnText').value.trim() || 'Learn More';
         const imgUrl  = document.getElementById('adImage').value.trim();
-
         document.getElementById('prev-sponsor').textContent = sponsor;
         document.getElementById('prev-title').textContent   = title;
         document.getElementById('prev-text').textContent    = text;
         document.getElementById('prev-cta').innerHTML       = `${btnText} <i class="fas fa-arrow-right"></i>`;
-
         const img = document.getElementById('prev-img');
-        if (imgUrl) {
-            img.src = imgUrl;
-            img.style.display = 'block';
-        } else {
-            img.style.display = 'none';
+        img.src = imgUrl; img.style.display = imgUrl ? 'block' : 'none';
+    }
+
+    // ══════════════════════════════════════════
+    // USER ADS (userAds collection)
+    // ══════════════════════════════════════════
+
+    async function loadUserAds() {
+        try {
+            const snap = await db.collection('userAds').orderBy('createdAt', 'desc').get();
+            allUserAds = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            const pending = allUserAds.filter(a => a.status === 'pending').length;
+            document.getElementById('pendingBadge').textContent = pending + ' pending';
+            renderUserAdsTable();
+        } catch (e) {
+            toast('Failed to load user ads: ' + e.message, 'error');
         }
     }
 
-    // Expose functions needed globally
+    function filterUserAds(filter) {
+        userAdsFilter = filter;
+        document.querySelectorAll('#userAdsFilterTabs .filter-tab').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+        renderUserAdsTable();
+    }
+
+    function renderUserAdsTable() {
+        const tbody = document.getElementById('userAdsTableBody');
+        let ads = userAdsFilter === 'all' ? allUserAds : allUserAds.filter(a => a.status === userAdsFilter);
+
+        if (!ads.length) {
+            tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:36px;color:var(--dim);">
+                ${userAdsFilter === 'pending' ? '🎉 No pending ads to review' : 'No submissions found'}
+            </td></tr>`;
+            return;
+        }
+
+        const typeLabels = { ppc_native:'PPC Native', ppc_popup:'PPC Pop-up', native_duration:'Native', popup_duration:'Pop-up' };
+        const statusBadges = {
+            pending:  '<span class="badge badge-pending">Pending</span>',
+            active:   '<span class="badge badge-active">Live</span>',
+            rejected: '<span class="badge badge-inactive">Rejected</span>',
+            expired:  '<span class="badge badge-expired">Expired</span>'
+        };
+
+        tbody.innerHTML = ads.map(ad => {
+            const date = ad.createdAt?.toDate ? ad.createdAt.toDate().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'}) : '—';
+            const pkg  = ad.isPPC ? (ad.totalClicks?.toLocaleString()+' clicks') : (ad.durationLabel||'—');
+            return `<tr>
+                <td>${ad.image ? `<img class="td-thumb" src="${ad.image}" onerror="this.style.display='none'">` : `<div class="td-thumb" style="background:rgba(243,146,0,0.07);display:flex;align-items:center;justify-content:center;color:var(--orange);font-size:13px;"><i class="fas fa-bullhorn"></i></div>`}</td>
+                <td class="td-title" title="${ad.title||''}">${ad.title||'—'}</td>
+                <td style="font-size:12px;color:var(--dim);">${ad.username||ad.uid?.slice(0,8)||'—'}</td>
+                <td><span class="badge badge-scheduled" style="font-size:10px;">${typeLabels[ad.adType]||ad.adType}</span></td>
+                <td style="font-size:12px;">${pkg}</td>
+                <td style="font-family:'Space Mono',monospace;font-size:12px;">${(ad.srcPaid||0).toFixed(4)} SRC</td>
+                <td>${statusBadges[ad.status]||'<span class="badge badge-expired">'+ad.status+'</span>'}</td>
+                <td style="font-size:12px;color:var(--dim);">${date}</td>
+                <td><div class="td-actions">
+                    <button class="btn-view" onclick="viewAdDetail('${ad.id}')"><i class="fas fa-eye"></i> View</button>
+                    ${ad.status === 'pending' ? `
+                        <button class="btn-edit" onclick="approveUserAd('${ad.id}')"><i class="fas fa-check"></i> Approve</button>
+                        <button class="btn-danger" onclick="openRejectModal('${ad.id}')"><i class="fas fa-times"></i> Reject</button>
+                    ` : ad.status === 'active' ? `
+                        <button class="btn-danger" onclick="deactivateUserAd('${ad.id}')"><i class="fas fa-ban"></i> Deactivate</button>
+                    ` : `<span style="color:var(--dim);font-size:12px;">${ad.status}</span>`}
+                </div></td>
+            </tr>`;
+        }).join('');
+    }
+
+    async function approveUserAd(id) {
+        try {
+            await db.collection('userAds').doc(id).update({ status: 'active', active: true });
+            toast('Ad approved and now live!', 'success');
+            closeAdDetail();
+            await loadUserAds();
+        } catch (e) { toast('Failed: ' + e.message, 'error'); }
+    }
+
+    async function deactivateUserAd(id) {
+        try {
+            await db.collection('userAds').doc(id).update({ status: 'expired', active: false });
+            toast('Ad deactivated', 'info');
+            await loadUserAds();
+        } catch (e) { toast('Failed: ' + e.message, 'error'); }
+    }
+
+    // ── AD DETAIL VIEWER ──
+    function viewAdDetail(id) {
+        const ad = allUserAds.find(a => a.id === id);
+        if (!ad) return;
+
+        const typeLabels = { ppc_native:'PPC Native', ppc_popup:'PPC Pop-up', native_duration:'Native (Duration)', popup_duration:'Pop-up (Duration)' };
+        const statusColors = { pending:'#ffd400', active:'#00ba7c', rejected:'#ef4444', expired:'#71767b' };
+        const pkg = ad.isPPC ? (ad.totalClicks?.toLocaleString()+' clicks') : (ad.durationLabel||'—');
+        const date = ad.createdAt?.toDate ? ad.createdAt.toDate().toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+
+        document.getElementById('adDetailBody').innerHTML = `
+            ${ad.image ? `<img class="ad-detail-image" src="${ad.image}" onerror="this.style.display='none'">` : ''}
+
+            <div class="ad-detail-row">
+                <div class="ad-detail-label">Status</div>
+                <div class="ad-detail-val">
+                    <span style="font-weight:800;color:${statusColors[ad.status]||'#fff'};">${(ad.status||'').toUpperCase()}</span>
+                    ${ad.rejectionReason ? `<div style="font-size:12px;color:#ef4444;margin-top:4px;padding:6px 10px;background:rgba(239,68,68,0.08);border-radius:6px;">Rejection reason: ${ad.rejectionReason}</div>` : ''}
+                </div>
+            </div>
+            <div class="ad-detail-divider"></div>
+
+            <div class="ad-detail-row">
+                <div class="ad-detail-label">Advertiser</div>
+                <div class="ad-detail-val">${ad.username||'—'} <span style="color:#71767b;font-size:11px;">(UID: ${ad.uid?.slice(0,12)||'—'})</span></div>
+            </div>
+            <div class="ad-detail-row">
+                <div class="ad-detail-label">Brand Name</div>
+                <div class="ad-detail-val" style="font-weight:600;">${ad.sponsor||'—'}</div>
+            </div>
+            <div class="ad-detail-row">
+                <div class="ad-detail-label">Ad Type</div>
+                <div class="ad-detail-val">${typeLabels[ad.adType]||ad.adType||'—'}</div>
+            </div>
+            <div class="ad-detail-row">
+                <div class="ad-detail-label">Package</div>
+                <div class="ad-detail-val">${pkg}</div>
+            </div>
+            <div class="ad-detail-divider"></div>
+
+            <div class="ad-detail-row">
+                <div class="ad-detail-label">Headline</div>
+                <div class="ad-detail-val" style="font-weight:700;font-size:15px;">${ad.title||'—'}</div>
+            </div>
+            <div class="ad-detail-row">
+                <div class="ad-detail-label">Description</div>
+                <div class="ad-detail-val" style="color:#bbb;">${ad.text||'—'}</div>
+            </div>
+            <div class="ad-detail-row">
+                <div class="ad-detail-label">CTA Button</div>
+                <div class="ad-detail-val">"${ad.buttonText||'—'}"</div>
+            </div>
+            <div class="ad-detail-row">
+                <div class="ad-detail-label">Destination</div>
+                <div class="ad-detail-val"><a href="${ad.buttonLink||'#'}" target="_blank" style="color:var(--orange);word-break:break-all;">${ad.buttonLink||'—'}</a></div>
+            </div>
+            ${ad.youtubeUrl ? `
+            <div class="ad-detail-row">
+                <div class="ad-detail-label">YouTube</div>
+                <div class="ad-detail-val"><a href="${ad.youtubeUrl}" target="_blank" style="color:var(--orange);word-break:break-all;">${ad.youtubeUrl}</a></div>
+            </div>` : ''}
+            <div class="ad-detail-divider"></div>
+
+            <div class="ad-detail-row">
+                <div class="ad-detail-label">Amount Paid</div>
+                <div class="ad-detail-val">₦${(ad.pricePaid||0).toLocaleString()} &nbsp;·&nbsp; <span style="color:var(--orange);font-weight:700;">${(ad.srcPaid||0).toFixed(4)} SRC</span></div>
+            </div>
+            ${ad.isPPC ? `
+            <div class="ad-detail-row">
+                <div class="ad-detail-label">Clicks Left</div>
+                <div class="ad-detail-val">${(ad.clicksRemaining||0).toLocaleString()} / ${(ad.totalClicks||0).toLocaleString()}</div>
+            </div>
+            <div class="ad-detail-row">
+                <div class="ad-detail-label">SRC Rewarded</div>
+                <div class="ad-detail-val" style="color:#00ba7c;">${(ad.rewardDistributed||0).toFixed(4)} SRC distributed to clickers</div>
+            </div>` : ''}
+            <div class="ad-detail-row">
+                <div class="ad-detail-label">Submitted</div>
+                <div class="ad-detail-val" style="color:#71767b;">${date}</div>
+            </div>
+        `;
+
+        document.getElementById('adDetailActions').innerHTML = ad.status === 'pending' ? `
+            <button class="ad-detail-approve" onclick="approveUserAd('${ad.id}')">
+                <i class="fas fa-check"></i> Approve & Go Live
+            </button>
+            <button class="ad-detail-reject" onclick="closeAdDetail(); openRejectModal('${ad.id}')">
+                <i class="fas fa-times"></i> Reject & Refund
+            </button>
+        ` : `<button class="ad-detail-close-only" onclick="closeAdDetail()">Close</button>`;
+
+        document.getElementById('adDetailOverlay').classList.add('show');
+    }
+
+    function closeAdDetail() {
+        document.getElementById('adDetailOverlay').classList.remove('show');
+    }
+
+    // ── REJECT & REFUND ──
+    function openRejectModal(id) {
+        document.getElementById('rejectAdId').value = id;
+        document.getElementById('rejectReason').value = '';
+        document.getElementById('rejectOverlay').classList.add('show');
+    }
+
+    function closeRejectModal() {
+        document.getElementById('rejectOverlay').classList.remove('show');
+    }
+
+    async function confirmReject() {
+        const id     = document.getElementById('rejectAdId').value;
+        const reason = document.getElementById('rejectReason').value.trim();
+        if (!reason) { toast('Please enter a rejection reason', 'error'); return; }
+
+        const btn = document.getElementById('rejectConfirmBtn');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        btn.disabled = true;
+
+        try {
+            const adSnap = await db.collection('userAds').doc(id).get();
+            if (!adSnap.exists) throw new Error('Ad not found');
+            const ad = adSnap.data();
+
+            // Reject the ad
+            await db.collection('userAds').doc(id).update({
+                status: 'rejected',
+                active: false,
+                rejectionReason: reason
+            });
+
+            // Refund SRC to advertiser
+            if (ad.uid && ad.srcPaid > 0) {
+                const userSnap = await db.collection('users').doc(ad.uid).get();
+                if (userSnap.exists) {
+                    const bal = userSnap.data().srcWallet?.balance || 0;
+                    await db.collection('users').doc(ad.uid).update({ 'srcWallet.balance': bal + ad.srcPaid });
+
+                    // Log refund in adminRevenue
+                    await db.collection('adminRevenue').add({
+                        type: 'ad_refund',
+                        adType: ad.adType,
+                        uid: ad.uid,
+                        username: ad.username || '—',
+                        ngnAmount: -(ad.pricePaid || 0),
+                        srcAmount: -(ad.srcPaid || 0),
+                        reason: reason,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    toast(`Rejected & refunded ${ad.srcPaid.toFixed(4)} SRC to ${ad.username||'user'}`, 'info');
+                } else {
+                    toast('Ad rejected (user not found for refund)', 'error');
+                }
+            } else {
+                toast('Ad rejected', 'info');
+            }
+
+            closeRejectModal();
+            closeAdDetail();
+            await loadUserAds();
+
+        } catch (e) {
+            toast('Failed: ' + e.message, 'error');
+        } finally {
+            btn.innerHTML = '<i class="fas fa-times"></i> Confirm Reject';
+            btn.disabled = false;
+        }
+    }
+
+    // ══════════════════════════════════════════
+    // REVENUE
+    // ══════════════════════════════════════════
+
+    async function loadRevenue() {
+        try {
+            const snap = await db.collection('adminRevenue').orderBy('createdAt', 'desc').get();
+            const records = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+            // Only count positive amounts for totals (exclude refunds)
+            const totalNGN = records.reduce((s,r) => s + (r.ngnAmount||0), 0);
+            const totalSRC = records.reduce((s,r) => s + (r.srcAmount||0), 0);
+
+            document.getElementById('revTotalNGN').textContent = '₦' + Math.max(0, totalNGN).toLocaleString();
+            document.getElementById('revTotalSRC').textContent = Math.max(0, totalSRC).toFixed(4);
+            document.getElementById('revTotalTx').textContent  = records.filter(r => r.type !== 'ad_refund').length;
+
+            const typeLabels = { ppc_native:'PPC Native', ppc_popup:'PPC Pop-up', native_duration:'Native', popup_duration:'Pop-up', ad_payment:'Ad Payment', ad_refund:'Refund' };
+
+            document.getElementById('revenueTableBody').innerHTML = records.length ? records.map(r => {
+                const date = r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'}) : '—';
+                const isRefund = r.type === 'ad_refund' || (r.ngnAmount||0) < 0;
+                return `<tr class="${isRefund ? 'refund-row' : ''}">
+                    <td style="font-size:12px;color:var(--dim);">${date}</td>
+                    <td style="font-size:13px;">${r.username||'—'}</td>
+                    <td><span class="badge ${isRefund ? 'badge-inactive' : 'badge-active'}" style="font-size:10px;">${typeLabels[r.type]||typeLabels[r.adType]||r.adType||'—'}</span></td>
+                    <td style="font-family:'Space Mono',monospace;font-size:12px;color:${isRefund ? 'var(--red)' : 'var(--green)'};">${isRefund ? '-' : '+'}₦${Math.abs(r.ngnAmount||0).toLocaleString()}</td>
+                    <td style="font-family:'Space Mono',monospace;font-size:12px;">${isRefund ? '-' : '+'}${Math.abs(r.srcAmount||0).toFixed(4)}</td>
+                    <td style="font-size:12px;color:var(--dim);">${r.reason || '—'}</td>
+                </tr>`;
+            }).join('') : '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--dim);">No revenue records yet</td></tr>';
+
+        } catch (e) { toast('Failed to load revenue: ' + e.message, 'error'); }
+    }
+
+    // Close modals on overlay click
+    document.getElementById('adDetailOverlay').addEventListener('click', function(e) {
+        if (e.target === this) closeAdDetail();
+    });
+    document.getElementById('rejectOverlay').addEventListener('click', function(e) {
+        if (e.target === this) closeRejectModal();
+    });
+
+    // Expose all globals
     window.saveAd = saveAd;
-    window.editAd = editAd;
-    window.deleteAd = deleteAd;
-    window.toggleActive = toggleActive;
+    window.editAdminAd = editAdminAd;
+    window.deleteAdminAd = deleteAdminAd;
+    window.toggleAdminAd = toggleAdminAd;
     window.resetForm = resetForm;
     window.previewImage = previewImage;
     window.updatePreview = updatePreview;
-    window.loadAds = loadAds;
-
-        // ── USER ADS MANAGEMENT ──
-        let allUserAds = [];
-        let userAdsFilter = 'pending';
-
-        async function loadUserAds() {
-            try {
-                const snap = await db.collection('userAds').orderBy('createdAt', 'desc').get();
-                allUserAds = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                updatePendingCount();
-                renderUserAdsTable();
-            } catch(e) {
-                toast('Failed to load user ads: ' + e.message, 'error');
-            }
-        }
-
-        function updatePendingCount() {
-            const pending = allUserAds.filter(a => a.status === 'pending').length;
-            document.getElementById('pendingCount').textContent = pending + ' pending';
-        }
-
-        function filterUserAds(filter) {
-            userAdsFilter = filter;
-            document.querySelectorAll('[id^="uafilt-"]').forEach(b => b.classList.remove('active'));
-            document.getElementById('uafilt-' + filter)?.classList.add('active', 'on');
-            renderUserAdsTable();
-        }
-
-        function renderUserAdsTable() {
-            const tbody = document.getElementById('userAdsTableBody');
-            let ads = allUserAds;
-            if (userAdsFilter !== 'all') ads = ads.filter(a => a.status === userAdsFilter);
-
-            if (!ads.length) {
-                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:30px;color:var(--dim);">
-                    ${userAdsFilter === 'pending' ? 'No pending ads 🎉' : 'No submissions found'}
-                </td></tr>`;
-                return;
-            }
-
-            const typeLabels = { ppc_native:'PPC Native', ppc_popup:'PPC Pop-up', native_duration:'Native', popup_duration:'Pop-up' };
-
-            tbody.innerHTML = ads.map(ad => {
-                const date = ad.createdAt?.toDate ? ad.createdAt.toDate().toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'2-digit'}) : '—';
-                const pkg = ad.isPPC ? (ad.totalClicks?.toLocaleString() + ' clicks') : (ad.durationLabel || '—');
-                const statusColor = { pending:'badge-scheduled', active:'badge-active', rejected:'badge-inactive', expired:'badge-expired' }[ad.status] || 'badge-expired';
-
-                return `<tr>
-                    <td>${ad.image ? `<img class="td-thumb" src="${ad.image}" onerror="this.style.display='none'">` : `<div class="td-thumb" style="background:rgba(243,146,0,0.08);display:flex;align-items:center;justify-content:center;color:var(--orange);font-size:14px;"><i class="fas fa-ad"></i></div>`}</td>
-                    <td class="td-title" title="${ad.title||''}">${ad.title||'—'}</td>
-                    <td style="color:var(--dim);font-size:12px;">${ad.username||ad.uid?.slice(0,8)||'—'}</td>
-                    <td><span class="badge native">${typeLabels[ad.adType]||ad.adType}</span></td>
-                    <td style="font-size:12px;">${pkg}</td>
-                    <td style="font-family:'Space Mono',monospace;font-size:12px;">${(ad.srcPaid||0).toFixed(4)} SRC</td>
-                    <td><span class="badge ${statusColor}">${ad.status}</span></td>
-                    <td style="font-size:12px;color:var(--dim);">${date}</td>
-                    <td>
-                        <div class="td-actions">
-                            ${ad.status === 'pending' ? `
-                            <button class="btn-edit" onclick="approveUserAd('${ad.id}')"><i class="fas fa-check"></i> Approve</button>
-                            <button class="btn-danger" onclick="openRejectModal('${ad.id}')"><i class="fas fa-times"></i> Reject</button>
-                            ` : ad.status === 'active' ? `
-                            <button class="btn-danger" onclick="deactivateUserAd('${ad.id}')">Deactivate</button>
-                            ` : `<span style="color:var(--dim);font-size:12px;">${ad.status}</span>`}
-                        </div>
-                    </td>
-                </tr>`;
-            }).join('');
-        }
-
-        async function approveUserAd(adId) {
-            try {
-                await db.collection('userAds').doc(adId).update({ status: 'active', active: true });
-                toast('Ad approved and live!', 'success');
-                await loadUserAds();
-            } catch(e) { toast('Failed: ' + e.message, 'error'); }
-        }
-
-        function openRejectModal(adId) {
-            document.getElementById('rejectAdId').value = adId;
-            document.getElementById('rejectReason').value = '';
-            document.getElementById('rejectModal').style.display = 'flex';
-        }
-
-        async function confirmReject() {
-            const adId = document.getElementById('rejectAdId').value;
-            const reason = document.getElementById('rejectReason').value.trim();
-            if (!reason) { toast('Please enter a rejection reason', 'error'); return; }
-            try {
-                await db.collection('userAds').doc(adId).update({ status: 'rejected', active: false, rejectionReason: reason });
-                document.getElementById('rejectModal').style.display = 'none';
-                toast('Ad rejected', 'info');
-                await loadUserAds();
-            } catch(e) { toast('Failed: ' + e.message, 'error'); }
-        }
-
-        async function deactivateUserAd(adId) {
-            try {
-                await db.collection('userAds').doc(adId).update({ status: 'expired', active: false });
-                toast('Ad deactivated', 'info');
-                await loadUserAds();
-            } catch(e) { toast('Failed: ' + e.message, 'error'); }
-        }
-
-        // ── REVENUE ──
-        async function loadRevenue() {
-            try {
-                const snap = await db.collection('adminRevenue').orderBy('createdAt', 'desc').get();
-                const records = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-
-                const totalNGN = records.reduce((s, r) => s + (r.ngnAmount || 0), 0);
-                const totalSRC = records.reduce((s, r) => s + (r.srcAmount || 0), 0);
-
-                document.getElementById('revTotalNGN').textContent = '₦' + totalNGN.toLocaleString();
-                document.getElementById('revTotalSRC').textContent = totalSRC.toFixed(4);
-                document.getElementById('revTotalTx').textContent = records.length;
-
-                const typeLabels = { ppc_native:'PPC Native', ppc_popup:'PPC Pop-up', native_duration:'Native', popup_duration:'Pop-up', ad_payment:'Ad Payment' };
-                document.getElementById('revenueTableBody').innerHTML = records.length ? records.map(r => {
-                    const date = r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'}) : '—';
-                    return `<tr>
-                        <td style="font-size:12px;color:var(--dim);">${date}</td>
-                        <td style="font-size:13px;">${r.username||'—'}</td>
-                        <td><span class="badge native">${typeLabels[r.adType]||r.adType||'—'}</span></td>
-                        <td style="font-family:'Space Mono',monospace;font-size:12px;color:var(--green);">₦${(r.ngnAmount||0).toLocaleString()}</td>
-                        <td style="font-family:'Space Mono',monospace;font-size:12px;">${(r.srcAmount||0).toFixed(4)}</td>
-                    </tr>`;
-                }).join('') : '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--dim);">No revenue records yet</td></tr>';
-
-            } catch(e) { toast('Failed to load revenue: ' + e.message, 'error'); }
-        }
-
-        window.approveUserAd = approveUserAd;
-        window.openRejectModal = openRejectModal;
-        window.confirmReject = confirmReject;
-        window.deactivateUserAd = deactivateUserAd;
-        window.filterUserAds = filterUserAds;
-        window.loadUserAds = loadUserAds;
-        window.loadRevenue = loadRevenue;
-
-        // Auto-load user ads on init
-        const _origLoadAdsAdmin = window.loadAds;
-        window.loadAds = async function() {
-            await _origLoadAdsAdmin();
-            await loadUserAds();
-            await loadRevenue();
-        };
-
+    window.loadAdminAds = loadAdminAds;
+    window.loadUserAds = loadUserAds;
+    window.filterUserAds = filterUserAds;
+    window.viewAdDetail = viewAdDetail;
+    window.closeAdDetail = closeAdDetail;
+    window.approveUserAd = approveUserAd;
+    window.deactivateUserAd = deactivateUserAd;
+    window.openRejectModal = openRejectModal;
+    window.closeRejectModal = closeRejectModal;
+    window.confirmReject = confirmReject;
+    window.loadRevenue = loadRevenue;
 </script>
 </body>
 </html>
