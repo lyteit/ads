@@ -954,14 +954,24 @@
     // ── AUTH ──
     document.getElementById('googleSignInBtn').addEventListener('click', async () => {
         const btn = document.getElementById('googleSignInBtn');
-        btn.innerHTML = '<div class="spinner" style="border-color:rgba(243,146,0,0.3);border-left-color:var(--orange);"></div> Redirecting...';
+        btn.innerHTML = '<div class="spinner" style="border-color:rgba(243,146,0,0.3);border-left-color:var(--orange);"></div> Signing in...';
         btn.disabled = true;
         try {
             const provider = new firebase.auth.GoogleAuthProvider();
             provider.setCustomParameters({ prompt: 'select_account' });
-            await auth.signInWithRedirect(provider);
+            const result = await auth.signInWithPopup(provider);
+            if (result.user.uid !== AUTHORIZED_UID) {
+                await auth.signOut();
+                showLoginError('⛔ Access denied. This account is not authorized.');
+                btn.innerHTML = '<i class="fab fa-google"></i> Sign in with Google';
+                btn.disabled = false;
+            }
+            // onAuthStateChanged will handle showing the panel
         } catch (e) {
-            showLoginError('Sign-in failed: ' + e.message);
+            // Silently reset if user just closed the popup
+            if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') {
+                showLoginError('Sign-in failed: ' + e.message);
+            }
             btn.innerHTML = '<i class="fab fa-google"></i> Sign in with Google';
             btn.disabled = false;
         }
@@ -972,21 +982,6 @@
         el.textContent = msg;
         el.classList.add('show');
     }
-
-    // Handle redirect result on page load
-    auth.getRedirectResult().then(result => {
-        if (result && result.user) {
-            const user = result.user;
-            if (user.uid !== AUTHORIZED_UID) {
-                auth.signOut();
-                showLoginError('⛔ Access denied. This account is not authorized.');
-            }
-        }
-    }).catch(e => {
-        if (e.code !== 'auth/no-current-user') {
-            showLoginError('Sign-in failed: ' + e.message);
-        }
-    });
 
     auth.onAuthStateChanged(user => {
         if (user && user.uid === AUTHORIZED_UID) {
