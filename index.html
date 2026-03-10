@@ -1013,7 +1013,7 @@
         <div class="stat-cell">
             <div class="stat-label">SRC Price</div>
             <div class="stat-value orange" id="statSRCPrice">₦0.00</div>
-            <div class="stat-sub">SOL reserve ÷ released</div>
+            <div class="stat-sub">USDC reserve ÷ released</div>
         </div>
         <div class="stat-cell">
             <div class="stat-label">Total Supply</div>
@@ -1032,8 +1032,8 @@
         </div>
         <div class="stat-cell">
             <div class="stat-label">USDC Reserve</div>
-            <div class="stat-value orange" id="statSOLReserve">₦0</div>
-            <div class="stat-sub" id="statSOLAmount">0 SOL</div>
+            <div class="stat-value orange" id="statSOLReserve">$0.00</div>
+            <div class="stat-sub" id="statSOLAmount">backing SRC price</div>
         </div>
         <div class="stat-cell">
             <div class="stat-label">Unissued Supply</div>
@@ -1045,7 +1045,6 @@
     <!-- NAV TABS -->
     <div class="nav-tabs">
         <button class="nav-tab active" onclick="switchTab('posts')"><i class="fas fa-pen-nib"></i> Create Post</button>
-        <button class="nav-tab" onclick="switchTab('predictions')"><i class="fas fa-bolt"></i> Predictions</button>
         <button class="nav-tab" onclick="switchTab('economy')"><i class="fas fa-coins"></i> SRC Economy</button>
         <button class="nav-tab" onclick="switchTab('sell')"><i class="fas fa-money-bill-wave"></i> Sell Requests <span class="badge" id="pendingBadge" style="display:none">0</span></button>
         <button class="nav-tab" onclick="switchTab('users')"><i class="fas fa-users"></i> Users</button>
@@ -1144,46 +1143,6 @@
         <!-- ══════════════════════════════
              SECTION 2: PREDICTIONS
         ══════════════════════════════ -->
-        <div class="section" id="section-predictions">
-            <div class="section-header">
-                <h2 class="section-title">Manage <span>Predictions</span></h2>
-                <button class="btn btn-primary" onclick="toggleCreatePred()"><i class="fas fa-plus"></i> New Prediction</button>
-            </div>
-
-            <!-- Create Prediction Form -->
-            <div class="card" id="createPredCard" style="display:none;">
-                <div class="card-title"><i class="fas fa-plus-circle"></i> New Prediction</div>
-                <div class="form-row single">
-                    <div class="form-group">
-                        <label class="form-label">Question</label>
-                        <input type="text" class="form-input" id="predQuestion" placeholder="Will BTC reach $100,000 by end of March?">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Deadline</label>
-                        <input type="datetime-local" class="form-input" id="predDeadline">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Status</label>
-                        <select class="form-select" id="predStatus">
-                            <option value="active">Active</option>
-                            <option value="closed">Closed</option>
-                        </select>
-                    </div>
-                </div>
-                <div style="display:flex;gap:10px;margin-top:8px;">
-                    <button class="btn btn-primary" onclick="createPrediction()"><i class="fas fa-bolt"></i> Create Prediction</button>
-                    <button class="btn btn-secondary" onclick="toggleCreatePred()">Cancel</button>
-                </div>
-            </div>
-
-            <!-- Predictions List -->
-            <div id="predictionsList">
-                <div class="empty-state"><i class="fas fa-bolt"></i><p>No predictions yet</p></div>
-            </div>
-        </div>
-
         <!-- ══════════════════════════════
              SECTION 3: SRC ECONOMY
         ══════════════════════════════ -->
@@ -1438,25 +1397,26 @@
                 totalSupply: 1000000,
                 releasedSupply: 50000,
                 unissuedSupply: 950000,
-                solAmount: 0,
-                solReserveNGN: 0,
+                usdcReserve: 30,
                 updatedAt: new Date().toISOString()
             });
+            treasuryData = { totalSupply: 1000000, releasedSupply: 50000, unissuedSupply: 950000, usdcReserve: 30 };
         } else {
             treasuryData = treasurySnap.data();
+            // Migrate old solAmount field if present
+            if (treasuryData.solAmount !== undefined && treasuryData.usdcReserve === undefined) {
+                treasuryData.usdcReserve = treasuryData.solAmount;
+            }
         }
 
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('adminApp').style.display = 'block';
 
-        await fetchSOLPrice();
-        solPriceInterval = setInterval(fetchSOLPrice, 60000);
-
         await loadStats();
         await loadRecentPosts();
-        await loadPredictions();
         await loadSellRequests();
         await loadUsers();
+        updatePriceCalculations();
     }
 
     window._firebaseReady.then(() => {
@@ -1486,33 +1446,28 @@
     }
 
     function updatePriceCalculations() {
-        const solAmount = treasuryData.solAmount || 0;
+        const usdcReserve = treasuryData.usdcReserve || 0;
         const releasedSupply = treasuryData.releasedSupply || 50000;
-        const solReserveNGN = solAmount; // USDC is already USD
-        const srcPrice = releasedSupply > 0 ? solAmount / releasedSupply : 0;
+        const srcPrice = releasedSupply > 0 ? usdcReserve / releasedSupply : 0;
 
-        // Update all price displays
         const priceStr = `$${srcPrice.toFixed(6)}`;
         document.getElementById('statSRCPrice').textContent = priceStr;
         document.getElementById('econSRCPrice').textContent = priceStr;
-        document.getElementById('econFormula').textContent = `$${solAmount.toFixed(2)} USDC ÷ ${releasedSupply.toLocaleString()} SRC`;
-        document.getElementById('statSOLReserve').textContent = `$${solAmount.toFixed(2)} USDC`;
+        document.getElementById('econFormula').textContent = `$${usdcReserve.toFixed(2)} USDC ÷ ${releasedSupply.toLocaleString()} SRC`;
+        document.getElementById('statSOLReserve').textContent = `$${usdcReserve.toFixed(2)} USDC`;
 
-        // Update release preview
         const releaseAmt = parseFloat(document.getElementById('releaseAmount')?.value) || 0;
         if (releaseAmt > 0) {
             const newRelease = releasedSupply + releaseAmt;
-            const newPrice = newRelease > 0 ? solReserveNGN / newRelease : 0;
-            document.getElementById('releasePricePreview').value = `₦${newPrice.toFixed(4)}`;
+            const newPrice = newRelease > 0 ? usdcReserve / newRelease : 0;
+            document.getElementById('releasePricePreview').value = `$${newPrice.toFixed(6)}`;
         }
 
-        // Update sol reserve display
         const solInput = parseFloat(document.getElementById('solAmountInput')?.value) || 0;
         if (solInput > 0) {
-            document.getElementById('solReserveDisplay').value = `₦${(solInput * solNGNPrice).toLocaleString('en-NG', {maximumFractionDigits:0})}`;
+            document.getElementById('solReserveDisplay').value = `$${(solInput / (releasedSupply || 50000)).toFixed(6)}/SRC`;
         }
     }
-
     // ─────────────────────────────────────
     // STATS
     // ─────────────────────────────────────
@@ -1525,7 +1480,7 @@
             treasuryData = tSnap.data();
             document.getElementById('statReleased').textContent = (treasuryData.releasedSupply || 50000).toLocaleString();
             document.getElementById('statUnissued').textContent = (treasuryData.unissuedSupply || 950000).toLocaleString();
-            document.getElementById('statSOLAmount').textContent = `$${(treasuryData.usdcReserve || treasuryData.solAmount || 0).toFixed(2)} USDC`;
+            document.getElementById('statSOLAmount').textContent = `$${(treasuryData.usdcReserve || 0).toFixed(2)} USDC`;
             document.getElementById('econReleased').textContent = (treasuryData.releasedSupply || 50000).toLocaleString();
             document.getElementById('econTreasury').textContent = `${(treasuryData.unissuedSupply || 950000).toLocaleString()} SRC`;
             if (document.getElementById('solAmountInput')) document.getElementById('solAmountInput').value = treasuryData.usdcReserve || treasuryData.solAmount || '';
@@ -1679,92 +1634,6 @@
     // ─────────────────────────────────────
     // PREDICTIONS
     // ─────────────────────────────────────
-    function toggleCreatePred() {
-        const card = document.getElementById('createPredCard');
-        card.style.display = card.style.display === 'none' ? 'block' : 'none';
-    }
-
-    async function createPrediction() {
-        const question = document.getElementById('predQuestion').value.trim();
-        const deadline = document.getElementById('predDeadline').value;
-        const status = document.getElementById('predStatus').value;
-        if (!question) { toast('Please enter a question.', 'error'); return; }
-        if (!deadline) { toast('Please set a deadline.', 'error'); return; }
-
-        try {
-            const { collection, addDoc } = window.FS;
-            await addDoc(collection(window.db, 'predictions'), {
-                question, status,
-                deadline: new Date(deadline).toISOString(),
-                yesPool: 0, noPool: 0, totalPool: 0, totalVotes: 0,
-                voters: [],
-                createdAt: new Date().toISOString()
-            });
-            toast('Prediction created!', 'success');
-            document.getElementById('predQuestion').value = '';
-            document.getElementById('predDeadline').value = '';
-            toggleCreatePred();
-            await loadPredictions();
-        } catch (e) { toast('Failed to create prediction.', 'error'); }
-    }
-
-    async function loadPredictions() {
-        const { collection, getDocs, query, orderBy } = window.FS;
-        const container = document.getElementById('predictionsList');
-        try {
-            const q = query(collection(window.db, 'predictions'), orderBy('createdAt', 'desc'));
-            const snap = await getDocs(q);
-            if (snap.empty) { container.innerHTML = '<div class="empty-state"><i class="fas fa-bolt"></i><p>No predictions yet</p></div>'; return; }
-
-            container.innerHTML = snap.docs.map(d => {
-                const p = d.data();
-                const yes = p.yesPool || 0, no = p.noPool || 0, total = yes + no || 1;
-                const yesPct = Math.round((yes / total) * 100);
-                const dl = p.deadline ? new Date(p.deadline).toLocaleString() : 'No deadline';
-                return `<div class="pred-card">
-                    <div class="pred-card-header">
-                        <div class="pred-question">${p.question}</div>
-                        <span class="badge badge-${p.status}">${p.status}</span>
-                    </div>
-                    <div class="pred-stats">
-                        <div class="pred-stat-item"><div class="pred-stat-label">VOTERS</div><div class="pred-stat-val">${p.totalVotes||0}</div></div>
-                        <div class="pred-stat-item"><div class="pred-stat-label">TOTAL POOL</div><div class="pred-stat-val" style="color:var(--orange)">${(p.totalPool||0).toFixed(1)} SRC</div></div>
-                        <div class="pred-stat-item"><div class="pred-stat-label">YES POOL</div><div class="pred-stat-val" style="color:var(--green)">${yes.toFixed(1)} SRC</div></div>
-                        <div class="pred-stat-item"><div class="pred-stat-label">NO POOL</div><div class="pred-stat-val" style="color:var(--red)">${no.toFixed(1)} SRC</div></div>
-                        <div class="pred-stat-item"><div class="pred-stat-label">DEADLINE</div><div class="pred-stat-val" style="font-size:12px;font-family:var(--font-mono)">${dl}</div></div>
-                    </div>
-                    <div class="pool-bar"><div class="pool-bar-yes" style="width:${yesPct}%"></div><div class="pool-bar-no"></div></div>
-                    <div class="pool-labels"><span class="pool-yes-lbl">YES ${yesPct}%</span><span class="pool-no-lbl">NO ${100-yesPct}%</span></div>
-                    <div class="pred-actions">
-                        ${p.status === 'active'
-                            ? `<button class="btn btn-secondary btn-sm" onclick="togglePredStatus('${d.id}','closed')"><i class="fas fa-lock"></i> Close</button>`
-                            : `<button class="btn btn-success btn-sm" onclick="togglePredStatus('${d.id}','active')"><i class="fas fa-unlock"></i> Reopen</button>`}
-                        <button class="btn btn-danger btn-sm" onclick="deletePrediction('${d.id}')"><i class="fas fa-trash"></i> Delete</button>
-                    </div>
-                </div>`;
-            }).join('');
-        } catch (e) { container.innerHTML = '<div class="empty-state"><p>Failed to load predictions.</p></div>'; }
-    }
-
-    async function togglePredStatus(id, newStatus) {
-        const { doc, updateDoc } = window.FS;
-        try {
-            await updateDoc(doc(window.db, 'predictions', id), { status: newStatus });
-            toast(`Prediction ${newStatus}.`, 'success');
-            await loadPredictions();
-        } catch (e) { toast('Failed to update.', 'error'); }
-    }
-
-    async function deletePrediction(id) {
-        if (!confirm('Delete this prediction? This cannot be undone.')) return;
-        const { doc, deleteDoc } = window.FS;
-        try {
-            await deleteDoc(doc(window.db, 'predictions', id));
-            toast('Prediction deleted.', 'success');
-            await loadPredictions();
-        } catch (e) { toast('Failed to delete.', 'error'); }
-    }
-
     // ─────────────────────────────────────
     // ECONOMY
     // ─────────────────────────────────────
@@ -1779,23 +1648,20 @@
     });
 
     async function updateSOLHoldings() {
-        const solAmount = parseFloat(document.getElementById('solAmountInput').value) || 0;
-        if (solAmount < 0) { toast('Invalid SOL amount.', 'error'); return; }
+        const usdcAmount = parseFloat(document.getElementById('solAmountInput').value) || 0;
+        if (usdcAmount < 0) { toast('Invalid amount.', 'error'); return; }
 
         const { doc, updateDoc } = window.FS;
         try {
-            const solReserveNGN = solAmount; // USDC is already USD
             await updateDoc(doc(window.db, 'settings', 'treasury'), {
-                solAmount,
-                solReserveNGN,
+                usdcReserve: usdcAmount,
                 updatedAt: new Date().toISOString()
             });
-            treasuryData.usdcReserve = solAmount;
-            
-            document.getElementById('statSOLAmount').textContent = `${solAmount} SOL`;
-            document.getElementById('statSOLReserve').textContent = `$${solAmount.toFixed(2)} USDC`;
+            treasuryData.usdcReserve = usdcAmount;
+            document.getElementById('statSOLAmount').textContent = `$${usdcAmount.toFixed(2)} USDC`;
+            document.getElementById('statSOLReserve').textContent = `$${usdcAmount.toFixed(2)} USDC`;
             updatePriceCalculations();
-            toast('SOL holdings updated!', 'success');
+            toast('USDC reserve updated!', 'success');
         } catch (e) { toast('Failed to update.', 'error'); }
     }
 
@@ -1884,6 +1750,7 @@
         const amount = parseFloat(document.getElementById('sendSRCAmount').value) || 0;
         if (amount <= 0) { toast('Enter a valid amount.', 'error'); return; }
 
+        // Coins come from the unissued reserve — sending puts them into circulation
         const unissued = treasuryData.unissuedSupply || 0;
         if (amount > unissued) { toast(`Insufficient unissued supply. Only ${unissued.toLocaleString()} SRC available.`, 'error'); return; }
 
@@ -1902,27 +1769,31 @@
                 const tSnap = await tx.get(treasuryRef);
                 const currentBal = userSnap.data().srcWallet?.balance || 0;
                 const currentUnissued = tSnap.data().unissuedSupply || 0;
+                const currentReleased = tSnap.data().releasedSupply || 0;
                 if (amount > currentUnissued) throw new Error('Insufficient unissued supply');
+                // Credit user, move from unissued → releasedSupply
                 tx.update(userRef, { 'srcWallet.balance': currentBal + amount });
-                tx.update(treasuryRef, { unissuedSupply: currentUnissued - amount });
+                tx.update(treasuryRef, {
+                    unissuedSupply: currentUnissued - amount,
+                    releasedSupply: currentReleased + amount,
+                    updatedAt: new Date().toISOString()
+                });
             });
 
-            // Log transaction
             await addDoc(collection(window.db, 'transactions'), {
-                type: 'admin_send',
-                toUid: selectedSendUser.uid,
+                type: 'admin_send', toUid: selectedSendUser.uid,
                 toWallet: selectedSendUser.srcWallet?.address,
-                amount,
-                note,
-                timestamp: new Date().toISOString(),
-                adminUid: adminUser.uid
+                amount, note, timestamp: new Date().toISOString(), adminUid: adminUser.uid
             });
 
             treasuryData.unissuedSupply -= amount;
+            treasuryData.releasedSupply += amount;
             document.getElementById('statUnissued').textContent = treasuryData.unissuedSupply.toLocaleString();
+            document.getElementById('statReleased').textContent = treasuryData.releasedSupply.toLocaleString();
             document.getElementById('econTreasury').textContent = `${treasuryData.unissuedSupply.toLocaleString()} SRC`;
+            document.getElementById('econReleased').textContent = treasuryData.releasedSupply.toLocaleString();
+            updatePriceCalculations();
 
-            // Update local user data
             const localUser = allUsers.find(u => u.uid === selectedSendUser.uid);
             if (localUser) localUser.srcWallet.balance = (localUser.srcWallet.balance || 0) + amount;
 
@@ -2046,39 +1917,46 @@
 
     async function approveSell(requestId) {
         if (!confirm('Confirm you have sent the USDC to the user\'s Solana wallet?')) return;
-        const { doc, updateDoc, getDoc } = window.FS;
+        const { doc, updateDoc, getDoc, runTransaction } = window.FS;
         try {
             const reqData = allSellRequests.find(r => r.id === requestId);
             if (!reqData) { toast('Request not found.', 'error'); return; }
 
-            // Mark as sent
-            await updateDoc(doc(window.db, 'sellRequests', requestId), {
-                status: 'sent',
-                sentAt: new Date().toISOString()
+            const tRef = doc(window.db, 'settings', 'treasury');
+            const srcAmount = reqData.srcAmount || reqData.amount || 0;
+            const netUSDC = reqData.netUSDC || 0;
+
+            await runTransaction(window.db, async (tx) => {
+                const tSnap = await tx.get(tRef);
+                const td = tSnap.data();
+                const currentUSDC = td.usdcReserve || 0;
+                const currentReleased = td.releasedSupply || 0;
+                const currentUnissued = td.unissuedSupply || 0;
+                // SRC sold = returns to unissued (out of circulation)
+                // USDC paid out = deducted from reserve
+                tx.update(tRef, {
+                    usdcReserve: Math.max(0, currentUSDC - netUSDC),
+                    releasedSupply: Math.max(0, currentReleased - srcAmount),
+                    unissuedSupply: currentUnissued + srcAmount,
+                    updatedAt: new Date().toISOString()
+                });
+                tx.update(doc(window.db, 'sellRequests', requestId), {
+                    status: 'sent', sentAt: new Date().toISOString()
+                });
             });
+
+            // Update local treasury state
+            const tSnap = await getDoc(tRef);
+            treasuryData = tSnap.data();
             reqData.status = 'sent';
 
-            // Deduct netUSDC from USDC reserve automatically
-            const tRef = doc(window.db, 'settings', 'treasury');
-            const tSnap = await getDoc(tRef);
-            const currentUSDC = tSnap.data().usdcReserve || 0;
-            const newUSDC = Math.max(0, currentUSDC - (reqData.netUSDC || 0));
-            await updateDoc(tRef, {
-                usdcReserve: newUSDC,
-                updatedAt: new Date().toISOString()
-            });
-            treasuryData.usdcReserve = newUSDC;
-
-            // SRC goes back to unissued supply (completed sell)
-            const currentUnissued = tSnap.data().unissuedSupply || 0;
-            const srcAmount = reqData.srcAmount || reqData.amount || 0;
-            await updateDoc(tRef, { unissuedSupply: currentUnissued + srcAmount });
-            treasuryData.unissuedSupply = currentUnissued + srcAmount;
-
             document.getElementById('statUnissued').textContent = treasuryData.unissuedSupply.toLocaleString();
+            document.getElementById('statReleased').textContent = treasuryData.releasedSupply.toLocaleString();
             document.getElementById('econTreasury').textContent = `${treasuryData.unissuedSupply.toLocaleString()} SRC`;
+            document.getElementById('econReleased').textContent = treasuryData.releasedSupply.toLocaleString();
+            updatePriceCalculations();
 
-            toast(`✅ Marked as sent. $${(reqData.netUSDC||0).toFixed(4)} USDC deducted from reserve.`, 'success');
+            toast(`✅ Marked as sent. $${netUSDC.toFixed(4)} USDC deducted from reserve. ${srcAmount} SRC returned to unissued supply.`, 'success');
             renderSellRequests();
             await loadStats();
         } catch (e) { toast('Failed to approve: ' + e.message, 'error'); }
@@ -2086,38 +1964,30 @@
 
     async function rejectSell(requestId, userUid, amount) {
         if (!confirm(`Reject this request and refund ${amount} SRC to the user?`)) return;
-        const { doc, updateDoc, getDoc } = window.FS;
+        const { doc, updateDoc, getDoc, runTransaction } = window.FS;
         try {
-            // Refund SRC to user
             const userRef = doc(window.db, 'users', userUid);
-            const userSnap = await getDoc(userRef);
-            const currentBal = userSnap.data().srcWallet?.balance || 0;
-            await updateDoc(userRef, { 'srcWallet.balance': currentBal + amount });
-
-            // Return SRC to unissued supply
             const tRef = doc(window.db, 'settings', 'treasury');
-            const tSnap = await getDoc(tRef);
-            const currentUnissued = tSnap.data().unissuedSupply || 0;
-            await updateDoc(tRef, { unissuedSupply: currentUnissued + amount });
-            treasuryData.unissuedSupply = currentUnissued + amount;
+            const reqRef = doc(window.db, 'sellRequests', requestId);
 
-            // Update sell request
-            await updateDoc(doc(window.db, 'sellRequests', requestId), {
-                status: 'rejected',
-                rejectedAt: new Date().toISOString()
+            await runTransaction(window.db, async (tx) => {
+                const userSnap = await tx.get(userRef);
+                const currentBal = userSnap.data().srcWallet?.balance || 0;
+                // Refund SRC to user — it stays in released supply (never left)
+                tx.update(userRef, { 'srcWallet.balance': currentBal + amount });
+                tx.update(reqRef, { status: 'rejected', rejectedAt: new Date().toISOString() });
             });
 
             const req = allSellRequests.find(r => r.id === requestId);
             if (req) req.status = 'rejected';
 
-            // Update local user balance
             const localUser = allUsers.find(u => u.uid === userUid);
-            if (localUser) localUser.srcWallet.balance = currentBal + amount;
+            if (localUser) localUser.srcWallet.balance = (localUser.srcWallet.balance || 0) + amount;
 
             toast(`Request rejected. ${amount} SRC refunded to user.`, 'success');
             renderSellRequests();
             await loadStats();
-        } catch (e) { toast('Failed to reject.', 'error'); }
+        } catch (e) { toast('Failed to reject: ' + e.message, 'error'); }
     }
 
     // ─────────────────────────────────────
