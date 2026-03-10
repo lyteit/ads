@@ -185,6 +185,40 @@
         .filter-tab:hover { border-color: rgba(243,146,0,0.4); color: var(--orange); }
         .filter-tab.active { background: var(--orange); border-color: var(--orange); color: #000; }
 
+
+        /* ── ADMIN NAV TABS ── */
+        .admin-nav-tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--dim);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            margin-bottom: -1px;
+        }
+        .admin-nav-tab:hover { color: var(--orange); }
+        .admin-nav-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
+
+        /* User avatar */
+        .user-table-avatar {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: rgba(243,146,0,0.1);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--orange);
+            font-weight: 700;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
         /* Revenue refund row */
         .refund-row td { color: var(--red) !important; }
     </style>
@@ -225,6 +259,22 @@
         </div>
     </div>
 
+    <!-- Nav Tabs -->
+    <div id="adminNavTabs" style="display:flex;gap:8px;margin-bottom:28px;border-bottom:1px solid var(--border);padding-bottom:0;">
+        <button class="admin-nav-tab active" onclick="switchTab('ads')" id="tabAds">
+            <i class="fas fa-bullhorn"></i> Ad Campaigns
+        </button>
+        <button class="admin-nav-tab" onclick="switchTab('users')" id="tabUsers">
+            <i class="fas fa-users"></i> Users
+            <span id="unverifiedBadge" style="display:none;background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.25);border-radius:20px;padding:2px 8px;font-size:11px;margin-left:4px;">0</span>
+        </button>
+
+        <button class="admin-nav-tab" onclick="switchTab('coin')" id="tabCoin">
+            <i class="fas fa-coins"></i> SRC Coin
+        </button>
+    </div>
+
+    <div id="adsSection">
     <!-- Admin Ads Stats -->
     <div class="stats-row">
         <div class="stat-card"><div class="stat-icon"><i class="fas fa-layer-group"></i></div><div class="stat-label">Total Ads</div><div class="stat-value" id="statTotal">—</div></div>
@@ -367,6 +417,168 @@
         </div>
     </div>
 
+    </div><!-- end #adsSection -->
+
+    <!-- ══ USERS SECTION ══ -->
+    <div id="usersSection" style="display:none;">
+
+        <!-- User Stats -->
+        <div class="stats-row">
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-label">Total Users</div><div class="stat-value" id="uStatTotal">—</div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-check-circle"></i></div><div class="stat-label">Verified</div><div class="stat-value" id="uStatVerified" style="color:var(--green);">—</div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-clock"></i></div><div class="stat-label">Unverified</div><div class="stat-value" id="uStatUnverified" style="color:var(--red);">—</div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-coins"></i></div><div class="stat-label">Total SRC in Wallets</div><div class="stat-value" id="uStatSRC">—</div></div>
+        </div>
+
+        <!-- Search + Filters -->
+        <div class="ads-panel">
+            <div class="ads-panel-header">
+                <div class="panel-title" style="margin:0;"><i class="fas fa-users"></i> All Users</div>
+                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                    <input type="text" id="userSearchInput" placeholder="Search username or email..." oninput="filterUsers()"
+                        style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:8px 14px;color:var(--text);font-size:13px;font-family:inherit;width:220px;outline:none;">
+                    <div class="filter-tabs" id="userStatusTabs">
+                        <button class="filter-tab active" onclick="setUserFilter('all')">All</button>
+                        <button class="filter-tab" onclick="setUserFilter('verified')">Verified</button>
+                        <button class="filter-tab" onclick="setUserFilter('unverified')">Unverified</button>
+                    </div>
+                    <button class="btn-secondary" onclick="loadUsers()" style="padding:8px 12px;font-size:12px;"><i class="fas fa-sync-alt"></i></button>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Verified</th>
+                            <th>SRC Balance</th>
+                            <th>Wallet Address</th>
+                            <th>Joined</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--dim);"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div><!-- end #usersSection -->
+
+
+    <!-- SRC Coin Section -->
+    <div id="coinSection" style="display:none;">
+
+        <!-- Price Stats -->
+        <div class="stats-row" style="margin-bottom:24px;">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="stat-label">Current SRC Price</div>
+                <div class="stat-value" id="coinCurrentPrice" style="color:var(--green);">₦—</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-history"></i></div>
+                <div class="stat-label">Opening Price</div>
+                <div class="stat-value" id="coinOpeningPrice" style="color:var(--dim);">₦—</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-percent"></i></div>
+                <div class="stat-label">24h Change</div>
+                <div class="stat-value" id="coinPriceChange">—</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-label">Total SRC in Wallets</div>
+                <div class="stat-value" id="coinTotalSRC">—</div>
+            </div>
+        </div>
+
+        <div class="panel-grid">
+
+            <!-- Price Control -->
+            <div class="panel">
+                <div class="panel-title"><i class="fas fa-sliders-h"></i> Update SRC Price</div>
+                <div class="form-group">
+                    <label>New Price (₦)</label>
+                    <input type="number" id="newSRCPrice" placeholder="e.g. 150.00" step="0.01" min="0.01">
+                </div>
+                <p style="font-size:12px;color:var(--dim);margin-bottom:18px;"><i class="fas fa-exclamation-triangle" style="color:var(--yellow);margin-right:5px;"></i>This updates the price for all users immediately.</p>
+                <button class="btn-primary" onclick="updateSRCPrice()" id="updatePriceBtn">
+                    <i class="fas fa-sync-alt"></i> Update Price
+                </button>
+
+                <div style="margin-top:28px;border-top:1px solid var(--border);padding-top:20px;">
+                    <div class="panel-title" style="font-size:14px;"><i class="fas fa-history"></i> Recent Price Updates</div>
+                    <div id="priceHistoryList" style="font-size:13px;color:var(--dim);">
+                        <i class="fas fa-circle-notch fa-spin"></i> Loading...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Send / Deduct SRC -->
+            <div class="panel">
+                <div class="panel-title"><i class="fas fa-exchange-alt"></i> Send / Deduct SRC</div>
+
+                <div class="form-group">
+                    <label>Wallet Address (e.g. src1234)</label>
+                    <div style="display:flex;gap:8px;">
+                        <input type="text" id="coinWalletInput" placeholder="src1234" maxlength="7" style="flex:1;">
+                        <button class="btn-primary" onclick="coinSearchUser()" style="padding:11px 16px;white-space:nowrap;">
+                            <i class="fas fa-search"></i> Find
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Found user -->
+                <div id="coinUserCard" style="display:none;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:18px;">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border);">
+                        <div id="coinUserAvatar" class="user-table-avatar">?</div>
+                        <div>
+                            <div id="coinUserName" style="font-weight:700;font-size:15px;">—</div>
+                            <div id="coinUserWallet" style="font-size:12px;color:var(--dim);">—</div>
+                        </div>
+                        <div style="margin-left:auto;text-align:right;">
+                            <div style="font-size:11px;color:var(--dim);margin-bottom:2px;">Balance</div>
+                            <div id="coinUserBalance" style="font-size:18px;font-weight:700;color:var(--green);font-family:'Space Mono',monospace;">—</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label>Amount to Send (SRC)</label>
+                            <input type="number" id="coinSendAmount" placeholder="0.00" min="0" step="0.01">
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label>Amount to Deduct (SRC)</label>
+                            <input type="number" id="coinDeductAmount" placeholder="0.00" min="0" step="0.01">
+                        </div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;">
+                        <button class="btn-primary" onclick="coinSend()" style="background:linear-gradient(135deg,#10b981,#059669);box-shadow:none;">
+                            <i class="fas fa-paper-plane"></i> Send SRC
+                        </button>
+                        <button class="btn-primary" onclick="coinDeduct()" style="background:linear-gradient(135deg,#ef4444,#dc2626);box-shadow:none;">
+                            <i class="fas fa-minus-circle"></i> Deduct SRC
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Transaction log -->
+                <div style="margin-top:4px;border-top:1px solid var(--border);padding-top:18px;">
+                    <div class="panel-title" style="font-size:14px;"><i class="fas fa-list"></i> Recent Transactions</div>
+                    <div id="coinTxList" style="font-size:13px;color:var(--dim);">
+                        <i class="fas fa-circle-notch fa-spin"></i> Loading...
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div><!-- end #coinSection -->
+
+
 </div><!-- end admin-wrap -->
 </div><!-- end main-panel -->
 
@@ -482,7 +694,16 @@
     document.getElementById('signOutBtn').addEventListener('click', () => auth.signOut());
 
     async function loadAll() {
-        await Promise.all([loadAdminAds(), loadUserAds(), loadRevenue()]);
+        await Promise.all([loadAdminAds(), loadUserAds(), loadRevenue(), loadUsersForBadge()]);
+    }
+
+    // Quick load just for the unverified badge count — no full render
+    async function loadUsersForBadge() {
+        try {
+            const snap = await db.collection('users').get();
+            allUsers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            updateUserStats();
+        } catch (e) { /* silent */ }
     }
 
     // ══════════════════════════════════════════
@@ -969,6 +1190,377 @@
 
         } catch (e) { toast('Failed to load revenue: ' + e.message, 'error'); }
     }
+
+
+    // ══════════════════════════════════════════
+    // NAV TABS
+    // ══════════════════════════════════════════
+    function switchTab(tab) {
+        document.getElementById('adsSection').style.display          = tab === 'ads'          ? 'block' : 'none';
+        document.getElementById('usersSection').style.display        = tab === 'users'        ? 'block' : 'none';
+        document.getElementById('coinSection').style.display         = tab === 'coin'         ? 'block' : 'none';
+        document.getElementById('tabAds').classList.toggle('active',          tab === 'ads');
+        document.getElementById('tabUsers').classList.toggle('active',        tab === 'users');
+        document.getElementById('tabCoin').classList.toggle('active',         tab === 'coin');
+        if (tab === 'users' && !allUsers.length) loadUsers();
+        if (tab === 'coin') initCoinTab();
+    }
+    window.switchTab = switchTab;
+
+    // ══════════════════════════════════════════
+    // USERS MANAGEMENT
+    // ══════════════════════════════════════════
+
+    let allUsers = [];
+    let usersFilter = 'all';
+
+    async function loadUsers() {
+        document.getElementById('usersTableBody').innerHTML =
+            '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--dim);"><i class="fas fa-circle-notch fa-spin"></i> Loading users...</td></tr>';
+        try {
+            const snap = await db.collection('users').orderBy('createdAt', 'desc').get();
+            allUsers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            updateUserStats();
+            renderUsersTable();
+        } catch (e) {
+            toast('Failed to load users: ' + e.message, 'error');
+        }
+    }
+    window.loadUsers = loadUsers;
+
+    function updateUserStats() {
+        const verified   = allUsers.filter(u => u.emailVerified).length;
+        const unverified = allUsers.filter(u => !u.emailVerified).length;
+        const totalSRC   = allUsers.reduce((s, u) => s + (u.srcWallet?.balance || 0), 0);
+
+        document.getElementById('uStatTotal').textContent     = allUsers.length;
+        document.getElementById('uStatVerified').textContent  = verified;
+        document.getElementById('uStatUnverified').textContent = unverified;
+        document.getElementById('uStatSRC').textContent       = totalSRC.toFixed(2);
+
+        // Badge on Users tab
+        const badge = document.getElementById('unverifiedBadge');
+        if (unverified > 0) {
+            badge.textContent = unverified;
+            badge.style.display = 'inline-block';
+        } else {
+            badge.style.display = 'none';
+        }
+
+    }
+
+    function setUserFilter(filter) {
+        usersFilter = filter;
+        document.querySelectorAll('#userStatusTabs .filter-tab').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+        renderUsersTable();
+    }
+    window.setUserFilter = setUserFilter;
+
+    function filterUsers() {
+        renderUsersTable();
+    }
+    window.filterUsers = filterUsers;
+
+    function renderUsersTable() {
+        const search = (document.getElementById('userSearchInput')?.value || '').toLowerCase();
+        let users = allUsers;
+
+        if (usersFilter === 'verified')   users = users.filter(u => u.emailVerified);
+        if (usersFilter === 'unverified') users = users.filter(u => !u.emailVerified);
+        if (search) {
+            users = users.filter(u =>
+                (u.username||'').toLowerCase().includes(search) ||
+                (u.email||'').toLowerCase().includes(search)
+            );
+        }
+
+        const tbody = document.getElementById('usersTableBody');
+        if (!users.length) {
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:36px;color:var(--dim);">No users found</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = users.map(u => {
+            const bal  = (u.srcWallet?.balance || 0).toFixed(4);
+            const addr = u.srcWallet?.address || '—';
+            const shortAddr = addr !== '—' ? addr.slice(0,8)+'...'+addr.slice(-4) : '—';
+            const joined = u.createdAt?.toDate
+                ? u.createdAt.toDate().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})
+                : '—';
+            const avatarEl = u.avatar
+                ? `<img src="${u.avatar}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;" onerror="this.outerHTML='<div class=\'user-table-avatar\'>${(u.username||'?')[0].toUpperCase()}</div>'">`
+                : `<div class="user-table-avatar">${(u.username||'?')[0].toUpperCase()}</div>`;
+
+            const verBadge = u.emailVerified
+                ? '<span class="badge badge-active"><i class="fas fa-check"></i> Verified</span>'
+                : '<span class="badge badge-inactive"><i class="fas fa-clock"></i> Unverified</span>';
+
+            return `<tr>
+                <td>${avatarEl}</td>
+                <td style="font-weight:600;">@${u.username||'—'}</td>
+                <td style="font-size:12px;color:var(--dim);">${u.email||'—'}</td>
+                <td>${verBadge}</td>
+                <td style="font-family:'Space Mono',monospace;font-size:12px;color:var(--orange);">${bal} SRC</td>
+                <td style="font-size:11px;color:var(--dim);" title="${addr}">${shortAddr}</td>
+                <td style="font-size:12px;color:var(--dim);">${joined}</td>
+                <td><div class="td-actions">
+                    <button class="btn-view" onclick="sendResetEmail('${u.email||''}','${u.username||u.id}')" title="Send password reset email">
+                        <i class="fas fa-key"></i> Reset
+                    </button>
+                    ${!u.emailVerified ? `
+                    <button class="btn-danger" onclick="deleteUnverifiedUser('${u.id}','${u.username||'this user'}')" title="Delete user">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </button>` : ''}
+                </div></td>
+            </tr>`;
+        }).join('');
+    }
+
+    async function deleteUnverifiedUser(uid, username) {
+        if (!confirm(`Delete unverified user "${username}"?\n\nThis removes their Firestore profile. Their Firebase Auth account will remain unless deleted via Firebase Console.`)) return;
+        try {
+            await db.collection('users').doc(uid).delete();
+            allUsers = allUsers.filter(u => u.id !== uid);
+            updateUserStats();
+            renderUsersTable();
+            toast(`Deleted user "${username}"`, 'info');
+        } catch (e) {
+            toast('Failed to delete: ' + e.message, 'error');
+        }
+    }
+    window.deleteUnverifiedUser = deleteUnverifiedUser;
+
+
+
+    // ══════════════════════════════════════════
+    // SRC COIN TAB
+    // ══════════════════════════════════════════
+
+    let srcCurrentPrice  = 0;
+    let srcOpeningPrice  = 0;
+    let coinFoundUser    = null;
+    let coinTabInited    = false;
+
+    async function initCoinTab() {
+        if (coinTabInited) return;
+        coinTabInited = true;
+        await loadSRCPrice();
+        await loadPriceHistory();
+        await loadCoinTxList();
+        // populate total SRC from allUsers if loaded, else fetch
+        if (allUsers.length) {
+            const total = allUsers.reduce((s,u) => s + (u.srcWallet?.balance||0), 0);
+            document.getElementById('coinTotalSRC').textContent = total.toFixed(2) + ' SRC';
+        } else {
+            db.collection('users').get().then(snap => {
+                const total = snap.docs.reduce((s,d) => s + (d.data().srcWallet?.balance||0), 0);
+                document.getElementById('coinTotalSRC').textContent = total.toFixed(2) + ' SRC';
+            });
+        }
+    }
+
+    async function loadSRCPrice() {
+        try {
+            const doc = await db.collection('settings').doc('currentPrice').get();
+            if (doc.exists) {
+                srcCurrentPrice = doc.data().price || 0;
+                srcOpeningPrice = doc.data().openingPrice || srcCurrentPrice;
+            }
+            updateCoinPriceDisplay();
+        } catch(e) { console.error('loadSRCPrice', e); }
+    }
+
+    function updateCoinPriceDisplay() {
+        document.getElementById('coinCurrentPrice').textContent  = '₦' + srcCurrentPrice.toFixed(2);
+        document.getElementById('coinOpeningPrice').textContent  = '₦' + srcOpeningPrice.toFixed(2);
+        const pct  = srcOpeningPrice ? ((srcCurrentPrice - srcOpeningPrice) / srcOpeningPrice * 100).toFixed(2) : '0.00';
+        const el   = document.getElementById('coinPriceChange');
+        el.textContent = (pct > 0 ? '+' : '') + pct + '%';
+        el.style.color = pct > 0 ? 'var(--green)' : pct < 0 ? 'var(--red)' : 'var(--dim)';
+    }
+
+    async function updateSRCPrice() {
+        const val = parseFloat(document.getElementById('newSRCPrice').value);
+        if (!val || val <= 0) { toast('Enter a valid price greater than 0', 'error'); return; }
+        const btn = document.getElementById('updatePriceBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Updating...';
+        try {
+            const oldPrice = srcCurrentPrice;
+            await db.collection('settings').doc('currentPrice').set({
+                price: val,
+                openingPrice: srcOpeningPrice || val,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            await db.collection('adminActions').add({
+                action: 'price_update',
+                oldPrice: oldPrice,
+                newPrice: val,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            srcCurrentPrice = val;
+            updateCoinPriceDisplay();
+            document.getElementById('newSRCPrice').value = '';
+            toast('SRC price updated to ₦' + val.toFixed(2), 'success');
+            loadPriceHistory();
+        } catch(e) {
+            toast('Failed: ' + e.message, 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-sync-alt"></i> Update Price';
+        }
+    }
+    window.updateSRCPrice = updateSRCPrice;
+
+    async function loadPriceHistory() {
+        const el = document.getElementById('priceHistoryList');
+        try {
+            const snap = await db.collection('adminActions')
+                .where('action','==','price_update')
+                .orderBy('timestamp','desc').limit(6).get();
+            if (snap.empty) { el.innerHTML = '<span style="color:var(--dim);">No history yet</span>'; return; }
+            el.innerHTML = snap.docs.map(d => {
+                const a = d.data();
+                const when = a.timestamp?.toDate ? a.timestamp.toDate().toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '—';
+                const dir  = a.newPrice >= a.oldPrice ? 'var(--green)' : 'var(--red)';
+                return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
+                    <span style="color:var(--dim);font-size:12px;">${when}</span>
+                    <span>₦${(a.oldPrice||0).toFixed(2)} → <strong style="color:${dir};">₦${(a.newPrice||0).toFixed(2)}</strong></span>
+                </div>`;
+            }).join('');
+        } catch(e) { el.innerHTML = '<span style="color:var(--red);">Error loading history</span>'; }
+    }
+
+    async function coinSearchUser() {
+        const addr = document.getElementById('coinWalletInput').value.trim().toLowerCase();
+        if (!addr.match(/^src\d{4}$/)) { toast('Format: src1234', 'error'); return; }
+        try {
+            const snap = await db.collection('users').where('srcWallet.address','==',addr).get();
+            if (snap.empty) { toast('No user found with wallet ' + addr, 'error'); document.getElementById('coinUserCard').style.display='none'; return; }
+            const doc  = snap.docs[0];
+            const data = doc.data();
+            coinFoundUser = { id: doc.id, ...data };
+            // Render card
+            const avatarEl = document.getElementById('coinUserAvatar');
+            if (data.avatar) {
+                avatarEl.innerHTML = `<img src="${data.avatar}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" onerror="this.outerHTML='${(data.username||'?')[0].toUpperCase()}'">`;
+            } else {
+                avatarEl.textContent = (data.username||'?')[0].toUpperCase();
+            }
+            document.getElementById('coinUserName').textContent    = '@' + (data.username||'—');
+            document.getElementById('coinUserWallet').textContent  = addr;
+            document.getElementById('coinUserBalance').textContent = (data.srcWallet?.balance||0).toFixed(4) + ' SRC';
+            document.getElementById('coinUserCard').style.display  = 'block';
+            document.getElementById('coinSendAmount').value   = '';
+            document.getElementById('coinDeductAmount').value = '';
+            toast('Found @' + (data.username||addr), 'success');
+        } catch(e) { toast('Search failed: ' + e.message, 'error'); }
+    }
+    window.coinSearchUser = coinSearchUser;
+
+    async function coinSend() {
+        if (!coinFoundUser) return;
+        const amount = parseFloat(document.getElementById('coinSendAmount').value);
+        if (!amount || amount <= 0) { toast('Enter a valid amount', 'error'); return; }
+        const oldBal = coinFoundUser.srcWallet?.balance || 0;
+        const newBal = oldBal + amount;
+        try {
+            await db.collection('users').doc(coinFoundUser.id).update({ 'srcWallet.balance': newBal });
+            await db.collection('adminTransactions').add({
+                type: 'send', toWallet: coinFoundUser.srcWallet?.address,
+                toUsername: coinFoundUser.username||'',
+                amount, previousBalance: oldBal, newBalance: newBal,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            coinFoundUser.srcWallet = { ...coinFoundUser.srcWallet, balance: newBal };
+            document.getElementById('coinUserBalance').textContent = newBal.toFixed(4) + ' SRC';
+            document.getElementById('coinSendAmount').value = '';
+            toast(`Sent ${amount.toFixed(2)} SRC to @${coinFoundUser.username||coinFoundUser.srcWallet?.address}`, 'success');
+            loadCoinTxList();
+        } catch(e) { toast('Failed: ' + e.message, 'error'); }
+    }
+    window.coinSend = coinSend;
+
+    async function coinDeduct() {
+        if (!coinFoundUser) return;
+        const amount = parseFloat(document.getElementById('coinDeductAmount').value);
+        if (!amount || amount <= 0) { toast('Enter a valid amount', 'error'); return; }
+        const oldBal = coinFoundUser.srcWallet?.balance || 0;
+        if (amount > oldBal) { toast(`Insufficient balance. User only has ${oldBal.toFixed(2)} SRC`, 'error'); return; }
+        const newBal = oldBal - amount;
+        try {
+            await db.collection('users').doc(coinFoundUser.id).update({ 'srcWallet.balance': newBal });
+            await db.collection('adminTransactions').add({
+                type: 'deduct', fromWallet: coinFoundUser.srcWallet?.address,
+                fromUsername: coinFoundUser.username||'',
+                amount, previousBalance: oldBal, newBalance: newBal,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            coinFoundUser.srcWallet = { ...coinFoundUser.srcWallet, balance: newBal };
+            document.getElementById('coinUserBalance').textContent = newBal.toFixed(4) + ' SRC';
+            document.getElementById('coinDeductAmount').value = '';
+            toast(`Deducted ${amount.toFixed(2)} SRC from @${coinFoundUser.username||coinFoundUser.srcWallet?.address}`, 'success');
+            loadCoinTxList();
+        } catch(e) { toast('Failed: ' + e.message, 'error'); }
+    }
+    window.coinDeduct = coinDeduct;
+
+    async function loadCoinTxList() {
+        const el = document.getElementById('coinTxList');
+        try {
+            const snap = await db.collection('adminTransactions')
+                .orderBy('timestamp','desc').limit(8).get();
+            if (snap.empty) { el.innerHTML = '<span style="color:var(--dim);">No transactions yet</span>'; return; }
+            el.innerHTML = snap.docs.map(d => {
+                const a    = d.data();
+                const when = a.timestamp?.toDate ? a.timestamp.toDate().toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : 'Just now';
+                if (a.type === 'send') {
+                    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);">
+                        <div><span style="color:var(--green);font-weight:600;"><i class="fas fa-arrow-up"></i> Sent</span>
+                        <span style="color:var(--dim);font-size:12px;margin-left:6px;">to @${a.toUsername||a.toWallet||'?'}</span></div>
+                        <div style="text-align:right;"><div style="color:var(--green);font-weight:700;">+${(a.amount||0).toFixed(2)} SRC</div>
+                        <div style="font-size:11px;color:var(--dim);">${when}</div></div>
+                    </div>`;
+                } else {
+                    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);">
+                        <div><span style="color:var(--red);font-weight:600;"><i class="fas fa-arrow-down"></i> Deducted</span>
+                        <span style="color:var(--dim);font-size:12px;margin-left:6px;">from @${a.fromUsername||a.fromWallet||'?'}</span></div>
+                        <div style="text-align:right;"><div style="color:var(--red);font-weight:700;">-${(a.amount||0).toFixed(2)} SRC</div>
+                        <div style="font-size:11px;color:var(--dim);">${when}</div></div>
+                    </div>`;
+                }
+            }).join('');
+        } catch(e) { el.innerHTML = '<span style="color:var(--red);">Error loading transactions</span>'; }
+    }
+
+    // ══════════════════════════════════════════
+    // PASSWORD RESET (admin-triggered)
+    // ══════════════════════════════════════════
+
+    async function sendResetEmail(email, username) {
+        if (!email) { toast('No email on record for this user', 'error'); return; }
+        if (!confirm(`Send password reset email to:\n${email} (@${username})?`)) return;
+        try {
+            await auth.sendPasswordResetEmail(email);
+            toast(`Reset email sent to ${email}`, 'success');
+            vStatResets++;
+            document.getElementById('vStatResets').textContent = vStatResets;
+        } catch (e) {
+            if (e.code === 'auth/user-not-found') {
+                toast('No Firebase Auth account found for this email', 'error');
+            } else if (e.code === 'auth/too-many-requests') {
+                toast('Too many requests — please wait before trying again', 'error');
+            } else {
+                toast('Failed: ' + e.message, 'error');
+            }
+        }
+    }
+    window.sendResetEmail = sendResetEmail;
+
+    let vStatResets = 0;
+
+
 
     // Close modals on overlay click
     document.getElementById('adDetailOverlay').addEventListener('click', function(e) {
