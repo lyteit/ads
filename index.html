@@ -653,7 +653,7 @@
         }
 
         .badge-pending { background: rgba(255,212,0,0.1); color: #ffd400; border: 1px solid rgba(255,212,0,0.3); }
-        .badge-completed { background: rgba(0,201,122,0.1); color: var(--green); border: 1px solid rgba(0,201,122,0.3); }
+        .badge-sent { background: rgba(0,201,122,0.1); color: var(--green); border: 1px solid rgba(0,201,122,0.3); }
         .badge-rejected { background: rgba(255,59,78,0.1); color: var(--red); border: 1px solid rgba(255,59,78,0.3); }
         .badge-active { background: rgba(0,201,122,0.1); color: var(--green); border: 1px solid rgba(0,201,122,0.3); }
         .badge-closed { background: rgba(136,136,136,0.1); color: var(--text2); border: 1px solid var(--border2); }
@@ -1031,7 +1031,7 @@
             <div class="stat-sub">in user wallets</div>
         </div>
         <div class="stat-cell">
-            <div class="stat-label">SOL Reserve</div>
+            <div class="stat-label">USDC Reserve</div>
             <div class="stat-value orange" id="statSOLReserve">₦0</div>
             <div class="stat-sub" id="statSOLAmount">0 SOL</div>
         </div>
@@ -1200,7 +1200,7 @@
                     <div class="price-formula" id="econFormula">SOL Reserve ÷ Released Supply</div>
                 </div>
                 <div class="price-display" style="background:linear-gradient(135deg,rgba(29,155,240,0.08),rgba(29,155,240,0.03));border-color:rgba(29,155,240,0.2);">
-                    <div class="price-label" style="color:var(--blue);">SOL/NGN Live Price</div>
+                    <div class="price-label" style="color:var(--blue);">USD/NGN Live Rate</div>
                     <div class="price-value" style="color:var(--blue);font-size:32px;" id="econSOLPrice">Loading...</div>
                     <div class="price-formula">via CoinGecko</div>
                 </div>
@@ -1208,21 +1208,21 @@
 
             <!-- Update SOL Holdings -->
             <div class="card">
-                <div class="card-title"><i class="fas fa-coins"></i> Update SOL Holdings</div>
+                <div class="card-title"><i class="fas fa-dollar-sign"></i> Update USDC Reserve</div>
                 <p style="font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.6;">
-                    Enter the actual amount of SOL you hold in your reserve wallet. The SRC price will recalculate automatically based on the current SOL/NGN rate from CoinGecko.
+                    Enter the actual amount of USDC you hold in your Solana reserve wallet. The SRC price recalculates automatically: <strong style="color:var(--text)">SRC Price = USDC Reserve ÷ Released Supply</strong>
                 </p>
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">SOL Amount Held</label>
-                        <input type="number" class="form-input" id="solAmountInput" placeholder="0.00" step="0.001" min="0">
+                        <label class="form-label">USDC Amount Held</label>
+                        <input type="number" class="form-input" id="solAmountInput" placeholder="0.00" step="0.01" min="0">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Reserve Value (₦) — Auto Calculated</label>
-                        <input type="text" class="form-input" id="solReserveDisplay" placeholder="₦0.00" readonly style="opacity:0.6;">
+                        <label class="form-label">SRC Price After Update — Auto Preview</label>
+                        <input type="text" class="form-input" id="solReserveDisplay" placeholder="$0.000000" readonly style="opacity:0.6;">
                     </div>
                 </div>
-                <button class="btn btn-primary" onclick="updateSOLHoldings()"><i class="fas fa-save"></i> Update SOL Holdings</button>
+                <button class="btn btn-primary" onclick="updateSOLHoldings()"><i class="fas fa-save"></i> Update USDC Reserve</button>
             </div>
 
             <!-- Release More SRC -->
@@ -1306,7 +1306,7 @@
                 <div style="display:flex;gap:8px;">
                     <button class="btn btn-secondary" onclick="filterSell('all')" id="filterAll" style="font-size:12px;">All</button>
                     <button class="btn btn-secondary" onclick="filterSell('pending')" id="filterPending" style="font-size:12px;border-color:rgba(255,212,0,0.4);color:#ffd400;">Pending</button>
-                    <button class="btn btn-secondary" onclick="filterSell('completed')" id="filterCompleted" style="font-size:12px;border-color:rgba(0,201,122,0.4);color:var(--green);">Completed</button>
+                    <button class="btn btn-secondary" onclick="filterSell('sent')" id="filterCompleted" style="font-size:12px;border-color:rgba(0,201,122,0.4);color:var(--green);">Sent</button>
                     <button class="btn btn-secondary" onclick="filterSell('rejected')" id="filterRejected" style="font-size:12px;border-color:rgba(255,59,78,0.4);color:var(--red);">Rejected</button>
                 </div>
             </div>
@@ -1475,10 +1475,10 @@
     // ─────────────────────────────────────
     async function fetchSOLPrice() {
         try {
-            const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=ngn');
+            const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=usd-coin&vs_currencies=ngn');
             const data = await res.json();
-            solNGNPrice = data.solana?.ngn || 0;
-            document.getElementById('econSOLPrice').textContent = `₦${solNGNPrice.toLocaleString('en-NG', {maximumFractionDigits:0})}`;
+            solNGNPrice = data['usd-coin']?.ngn || 1600;
+            document.getElementById('econSOLPrice').textContent = `₦${solNGNPrice.toLocaleString('en-NG', {maximumFractionDigits:0})}/USD`;
             updatePriceCalculations();
         } catch (e) {
             document.getElementById('econSOLPrice').textContent = 'Unavailable';
@@ -1488,15 +1488,15 @@
     function updatePriceCalculations() {
         const solAmount = treasuryData.solAmount || 0;
         const releasedSupply = treasuryData.releasedSupply || 50000;
-        const solReserveNGN = solAmount * solNGNPrice;
-        const srcPrice = releasedSupply > 0 ? solReserveNGN / releasedSupply : 0;
+        const solReserveNGN = solAmount; // USDC is already USD
+        const srcPrice = releasedSupply > 0 ? solAmount / releasedSupply : 0;
 
         // Update all price displays
-        const priceStr = `₦${srcPrice.toFixed(4)}`;
+        const priceStr = `$${srcPrice.toFixed(6)}`;
         document.getElementById('statSRCPrice').textContent = priceStr;
         document.getElementById('econSRCPrice').textContent = priceStr;
-        document.getElementById('econFormula').textContent = `₦${solReserveNGN.toLocaleString('en-NG', {maximumFractionDigits:0})} ÷ ${releasedSupply.toLocaleString()} SRC`;
-        document.getElementById('statSOLReserve').textContent = `₦${solReserveNGN.toLocaleString('en-NG', {maximumFractionDigits:0})}`;
+        document.getElementById('econFormula').textContent = `$${solAmount.toFixed(2)} USDC ÷ ${releasedSupply.toLocaleString()} SRC`;
+        document.getElementById('statSOLReserve').textContent = `$${solAmount.toFixed(2)} USDC`;
 
         // Update release preview
         const releaseAmt = parseFloat(document.getElementById('releaseAmount')?.value) || 0;
@@ -1525,10 +1525,10 @@
             treasuryData = tSnap.data();
             document.getElementById('statReleased').textContent = (treasuryData.releasedSupply || 50000).toLocaleString();
             document.getElementById('statUnissued').textContent = (treasuryData.unissuedSupply || 950000).toLocaleString();
-            document.getElementById('statSOLAmount').textContent = `${treasuryData.solAmount || 0} SOL`;
+            document.getElementById('statSOLAmount').textContent = `$${(treasuryData.usdcReserve || treasuryData.solAmount || 0).toFixed(2)} USDC`;
             document.getElementById('econReleased').textContent = (treasuryData.releasedSupply || 50000).toLocaleString();
             document.getElementById('econTreasury').textContent = `${(treasuryData.unissuedSupply || 950000).toLocaleString()} SRC`;
-            if (document.getElementById('solAmountInput')) document.getElementById('solAmountInput').value = treasuryData.solAmount || '';
+            if (document.getElementById('solAmountInput')) document.getElementById('solAmountInput').value = treasuryData.usdcReserve || treasuryData.solAmount || '';
         }
 
         // Circulating supply (sum of all user balances)
@@ -1773,7 +1773,7 @@
         const releaseInput = document.getElementById('releaseAmount');
         if (solInput) solInput.addEventListener('input', () => {
             const val = parseFloat(solInput.value) || 0;
-            document.getElementById('solReserveDisplay').value = val > 0 ? `₦${(val * solNGNPrice).toLocaleString('en-NG', {maximumFractionDigits:0})}` : '';
+            document.getElementById('solReserveDisplay').value = val > 0 ? `$${(val / (releasedSupply||50000)).toFixed(6)}/SRC` : '';
         });
         if (releaseInput) releaseInput.addEventListener('input', updatePriceCalculations);
     });
@@ -1784,16 +1784,16 @@
 
         const { doc, updateDoc } = window.FS;
         try {
-            const solReserveNGN = solAmount * solNGNPrice;
+            const solReserveNGN = solAmount; // USDC is already USD
             await updateDoc(doc(window.db, 'settings', 'treasury'), {
                 solAmount,
                 solReserveNGN,
                 updatedAt: new Date().toISOString()
             });
-            treasuryData.solAmount = solAmount;
-            treasuryData.solReserveNGN = solReserveNGN;
+            treasuryData.usdcReserve = solAmount;
+            
             document.getElementById('statSOLAmount').textContent = `${solAmount} SOL`;
-            document.getElementById('statSOLReserve').textContent = `₦${solReserveNGN.toLocaleString('en-NG', {maximumFractionDigits:0})}`;
+            document.getElementById('statSOLReserve').textContent = `$${solAmount.toFixed(2)} USDC`;
             updatePriceCalculations();
             toast('SOL holdings updated!', 'success');
         } catch (e) { toast('Failed to update.', 'error'); }
@@ -1997,35 +1997,34 @@
 
                 <div class="sell-card-amounts">
                     <div class="sell-amount-item">
-                        <div class="sell-amount-label">SRC Amount</div>
-                        <div class="sell-amount-val" style="color:var(--orange);font-family:var(--font-mono)">${r.amount} SRC</div>
+                        <div class="sell-amount-label">SRC Sold</div>
+                        <div class="sell-amount-val" style="color:var(--orange);font-family:var(--font-mono)">${(r.srcAmount||r.amount||0).toFixed(4)} SRC</div>
                     </div>
                     <div class="sell-amount-item">
-                        <div class="sell-amount-label">Gross Value</div>
-                        <div class="sell-amount-val">₦${(r.grossValue||0).toLocaleString('en-NG',{maximumFractionDigits:2})}</div>
+                        <div class="sell-amount-label">SRC Price</div>
+                        <div class="sell-amount-val" style="font-family:var(--font-mono)">$${(r.srcPriceUSD||0).toFixed(6)}</div>
                     </div>
                     <div class="sell-amount-item">
-                        <div class="sell-amount-label">Platform Fee</div>
-                        <div class="sell-amount-val" style="color:var(--red)">₦${(r.fee||0).toLocaleString()}</div>
+                        <div class="sell-amount-label">Gross USDC</div>
+                        <div class="sell-amount-val" style="font-family:var(--font-mono)">$${(r.grossUSDC||0).toFixed(6)}</div>
                     </div>
                     <div class="sell-amount-item">
-                        <div class="sell-amount-label">Net Payout</div>
-                        <div class="sell-amount-val" style="color:var(--green)">₦${(r.netPayout||0).toLocaleString('en-NG',{maximumFractionDigits:2})}</div>
+                        <div class="sell-amount-label">Fee (5%)</div>
+                        <div class="sell-amount-val" style="color:var(--red);font-family:var(--font-mono)">$${(r.feeUSDC||0).toFixed(6)}</div>
+                    </div>
+                    <div class="sell-amount-item">
+                        <div class="sell-amount-label">Send to User</div>
+                        <div class="sell-amount-val" style="color:var(--green);font-size:20px;font-family:var(--font-mono)">$${(r.netUSDC||0).toFixed(6)} USDC</div>
                     </div>
                 </div>
 
-                <div class="bank-details">
+                <div class="bank-details" style="grid-template-columns:1fr;">
                     <div>
-                        <div class="bank-item-label">Account Number</div>
-                        <div class="bank-item-val" style="font-family:var(--font-mono)">${r.accountNumber}</div>
-                    </div>
-                    <div>
-                        <div class="bank-item-label">Bank Name</div>
-                        <div class="bank-item-val">${r.bankName}</div>
-                    </div>
-                    <div>
-                        <div class="bank-item-label">Email</div>
-                        <div class="bank-item-val">${r.email}</div>
+                        <div class="bank-item-label">Solana Wallet Address</div>
+                        <div class="bank-item-val" style="font-family:var(--font-mono);font-size:12px;word-break:break-all;display:flex;align-items:center;gap:8px;">
+                            ${r.solanaWalletAddress || '—'}
+                            <button onclick="navigator.clipboard.writeText('${r.solanaWalletAddress||''}').then(()=>toast('Copied!','success'))" style="background:var(--orange-dim);border:1px solid rgba(243,146,0,0.3);color:var(--orange);padding:3px 8px;border-radius:6px;cursor:pointer;font-size:11px;white-space:nowrap;">Copy</button>
+                        </div>
                     </div>
                 </div>
 
@@ -2046,34 +2045,43 @@
     }
 
     async function approveSell(requestId) {
-        if (!confirm('Confirm you have sent the Naira payment to the user?')) return;
-        const { doc, updateDoc } = window.FS;
+        if (!confirm('Confirm you have sent the USDC to the user\'s Solana wallet?')) return;
+        const { doc, updateDoc, getDoc } = window.FS;
         try {
-            await updateDoc(doc(window.db, 'sellRequests', requestId), {
-                status: 'completed',
-                paidAt: new Date().toISOString()
-            });
-            const req = allSellRequests.find(r => r.id === requestId);
-            if (req) req.status = 'completed';
-
-            // SRC was already deducted at submission — nothing to do on SRC side
-            // But return SRC to unissued supply
-            const { doc: docFn, updateDoc: updateFn, getDoc } = window.FS;
-            const tRef = docFn(window.db, 'settings', 'treasury');
-            const tSnap = await getDoc(tRef);
-            const currentUnissued = tSnap.data().unissuedSupply || 0;
             const reqData = allSellRequests.find(r => r.id === requestId);
-            if (reqData) {
-                await updateFn(tRef, { unissuedSupply: currentUnissued + reqData.amount });
-                treasuryData.unissuedSupply = currentUnissued + reqData.amount;
-                document.getElementById('statUnissued').textContent = treasuryData.unissuedSupply.toLocaleString();
-                document.getElementById('econTreasury').textContent = `${treasuryData.unissuedSupply.toLocaleString()} SRC`;
-            }
+            if (!reqData) { toast('Request not found.', 'error'); return; }
 
-            toast('Sell request marked as paid. SRC returned to treasury.', 'success');
+            // Mark as sent
+            await updateDoc(doc(window.db, 'sellRequests', requestId), {
+                status: 'sent',
+                sentAt: new Date().toISOString()
+            });
+            reqData.status = 'sent';
+
+            // Deduct netUSDC from USDC reserve automatically
+            const tRef = doc(window.db, 'settings', 'treasury');
+            const tSnap = await getDoc(tRef);
+            const currentUSDC = tSnap.data().usdcReserve || 0;
+            const newUSDC = Math.max(0, currentUSDC - (reqData.netUSDC || 0));
+            await updateDoc(tRef, {
+                usdcReserve: newUSDC,
+                updatedAt: new Date().toISOString()
+            });
+            treasuryData.usdcReserve = newUSDC;
+
+            // SRC goes back to unissued supply (completed sell)
+            const currentUnissued = tSnap.data().unissuedSupply || 0;
+            const srcAmount = reqData.srcAmount || reqData.amount || 0;
+            await updateDoc(tRef, { unissuedSupply: currentUnissued + srcAmount });
+            treasuryData.unissuedSupply = currentUnissued + srcAmount;
+
+            document.getElementById('statUnissued').textContent = treasuryData.unissuedSupply.toLocaleString();
+            document.getElementById('econTreasury').textContent = `${treasuryData.unissuedSupply.toLocaleString()} SRC`;
+
+            toast(`✅ Marked as sent. $${(reqData.netUSDC||0).toFixed(4)} USDC deducted from reserve.`, 'success');
             renderSellRequests();
             await loadStats();
-        } catch (e) { toast('Failed to approve.', 'error'); }
+        } catch (e) { toast('Failed to approve: ' + e.message, 'error'); }
     }
 
     async function rejectSell(requestId, userUid, amount) {
