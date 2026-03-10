@@ -114,6 +114,7 @@
         .badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
         .badge-active   { background: rgba(16,185,129,0.12); color: var(--green); border: 1px solid rgba(16,185,129,0.25); }
         .badge-inactive { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+        .badge-pending  { background: rgba(245,158,11,0.1); color: var(--yellow); border: 1px solid rgba(245,158,11,0.25); }
         .badge-scheduled{ background: rgba(243,146,0,0.1); color: var(--orange); border: 1px solid rgba(243,146,0,0.25); }
         .badge-expired  { background: rgba(107,114,128,0.12); color: var(--dim); border: 1px solid rgba(107,114,128,0.2); }
         .badge-pending  { background: rgba(245,158,11,0.12); color: var(--yellow); border: 1px solid rgba(245,158,11,0.25); }
@@ -271,6 +272,16 @@
 
         <button class="admin-nav-tab" onclick="switchTab('coin')" id="tabCoin">
             <i class="fas fa-coins"></i> SRC Coin
+        </button>
+        <button class="admin-nav-tab" onclick="switchTab('sells')" id="tabSells">
+            <i class="fas fa-hand-holding-usd"></i> Sell Requests
+            <span id="pendingSellsBadge" style="display:none;background:rgba(245,158,11,0.15);color:var(--yellow);border:1px solid rgba(245,158,11,0.25);border-radius:20px;padding:2px 8px;font-size:11px;margin-left:4px;">0</span>
+        </button>
+        <button class="admin-nav-tab" onclick="switchTab('posts')" id="tabPosts">
+            <i class="fas fa-pen-nib"></i> Posts
+        </button>
+        <button class="admin-nav-tab" onclick="switchTab('limits')" id="tabLimits">
+            <i class="fas fa-sliders-h"></i> Limits
         </button>
     </div>
 
@@ -480,19 +491,20 @@
                 <div class="stat-value" id="coinCurrentPrice" style="color:var(--green);">₦—</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-history"></i></div>
-                <div class="stat-label">Opening Price</div>
-                <div class="stat-value" id="coinOpeningPrice" style="color:var(--dim);">₦—</div>
+                <div class="stat-icon"><i class="fas fa-coins"></i></div>
+                <div class="stat-label">Community Reserve</div>
+                <div class="stat-value" id="coinReserve" style="color:var(--orange);">—</div>
+                <div style="font-size:11px;color:var(--dim);margin-top:4px;" id="coinReserveBar"></div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-percent"></i></div>
-                <div class="stat-label">24h Change</div>
-                <div class="stat-value" id="coinPriceChange">—</div>
+                <div class="stat-icon"><i class="fas fa-globe"></i></div>
+                <div class="stat-label">In Circulation</div>
+                <div class="stat-value" id="coinCirculating" style="color:var(--green);">—</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-users"></i></div>
-                <div class="stat-label">Total SRC in Wallets</div>
-                <div class="stat-value" id="coinTotalSRC">—</div>
+                <div class="stat-icon"><i class="fas fa-infinity"></i></div>
+                <div class="stat-label">Total Supply</div>
+                <div class="stat-value" id="coinTotalSupply" style="color:var(--dim);">10,000,000</div>
             </div>
         </div>
 
@@ -580,6 +592,147 @@
 
 
 </div><!-- end admin-wrap -->
+
+    <!-- SELL REQUESTS SECTION -->
+    <div id="sellsSection" style="display:none;">
+        <div class="stats-row" style="margin-bottom:24px;">
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-clock" style="color:var(--yellow);"></i></div><div class="stat-label">Pending</div><div class="stat-value" id="sellStatPending" style="color:var(--yellow);">—</div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-check-circle"></i></div><div class="stat-label">Completed</div><div class="stat-value" id="sellStatDone" style="color:var(--green);">—</div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-coins"></i></div><div class="stat-label">Total SRC Sold</div><div class="stat-value" id="sellStatSRC">—</div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-naira-sign"></i></div><div class="stat-label">Total NGN Paid Out</div><div class="stat-value" id="sellStatNGN">—</div></div>
+        </div>
+        <div class="panel">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+                <div class="panel-title" style="margin:0;"><i class="fas fa-hand-holding-usd"></i> Sell Requests</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                    <div class="filter-tabs" id="sellFilterTabs">
+                        <button class="filter-tab active" onclick="setSellFilter('pending')">Pending</button>
+                        <button class="filter-tab" onclick="setSellFilter('completed')">Completed</button>
+                        <button class="filter-tab" onclick="setSellFilter('all')">All</button>
+                    </div>
+                    <button class="btn-secondary" onclick="loadSellRequests()" style="padding:8px 12px;font-size:12px;"><i class="fas fa-sync-alt"></i></button>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>SRC Amount</th>
+                            <th>Gross Value</th>
+                            <th>Fee</th>
+                            <th>Net Payout</th>
+                            <th>Bank Details</th>
+                            <th>Submitted</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sellsTableBody">
+                        <tr><td colspan="9" style="text-align:center;padding:40px;color:var(--dim);"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div><!-- end #sellsSection -->
+
+    <!-- POSTS SECTION -->
+    <div id="postsSection" style="display:none;">
+        <div class="panel-grid">
+            <!-- Create Post -->
+            <div class="panel">
+                <div class="panel-title"><i class="fas fa-pen-nib"></i> Create Post</div>
+                <div class="form-group">
+                    <label>Post Type</label>
+                    <select id="adminPostType" onchange="toggleAdminPostType()">
+                        <option value="text">Text Post</option>
+                        <option value="youtube">YouTube Video</option>
+                    </select>
+                </div>
+                <div id="adminTextFields">
+                    <div class="form-group">
+                        <label>Title (Optional)</label>
+                        <input type="text" id="adminPostTitle" placeholder="Post title...">
+                    </div>
+                    <div class="form-group">
+                        <label>Text <span style="color:var(--dim);font-size:11px;">max 500 chars</span></label>
+                        <textarea id="adminPostText" maxlength="500" placeholder="What's on your mind?" style="min-height:120px;" oninput="document.getElementById('adminCharCount').textContent=this.value.length+'/500'"></textarea>
+                        <div style="text-align:right;font-size:11px;color:var(--dim);margin-top:4px;" id="adminCharCount">0/500</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Image URL (Optional)</label>
+                        <input type="url" id="adminPostImage" placeholder="https://...">
+                    </div>
+                </div>
+                <div id="adminYTFields" style="display:none;">
+                    <div class="form-group">
+                        <label>YouTube Video URL</label>
+                        <input type="url" id="adminPostYT" placeholder="https://youtube.com/watch?v=...">
+                    </div>
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="adminPostYTTitle" placeholder="Video title...">
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="adminCreatePost()" id="adminPostBtn">
+                    <i class="fas fa-paper-plane"></i> Publish Post
+                </button>
+            </div>
+            <!-- Posts List -->
+            <div class="panel">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+                    <div class="panel-title" style="margin:0;"><i class="fas fa-list"></i> Recent Posts</div>
+                    <button class="btn-secondary" onclick="loadAdminPosts()" style="padding:8px 12px;font-size:12px;"><i class="fas fa-sync-alt"></i></button>
+                </div>
+                <div id="adminPostsList" style="font-size:13px;color:var(--dim);">
+                    <i class="fas fa-circle-notch fa-spin"></i> Loading...
+                </div>
+            </div>
+        </div>
+    </div><!-- end #postsSection -->
+
+    <!-- LIMITS SECTION -->
+    <div id="limitsSection" style="display:none;">
+        <div class="panel-grid">
+            <!-- Sell Limits -->
+            <div class="panel">
+                <div class="panel-title"><i class="fas fa-hand-holding-usd"></i> Sell Limits</div>
+                <p style="font-size:13px;color:var(--dim);margin-bottom:20px;">Control how much SRC users can sell per day. Changes take effect immediately.</p>
+                <div class="form-group">
+                    <label>Max Daily Sell Value (₦)</label>
+                    <input type="number" id="limitMaxNGN" placeholder="10000" min="1000" step="1000">
+                    <div style="font-size:12px;color:var(--dim);margin-top:4px;">Current: <strong id="currentLimitNGN" style="color:var(--orange);">₦10,000</strong></div>
+                </div>
+                <div class="form-group">
+                    <label>Max Sell Requests Per Day</label>
+                    <input type="number" id="limitMaxPerDay" placeholder="1" min="1" max="10" step="1">
+                    <div style="font-size:12px;color:var(--dim);margin-top:4px;">Current: <strong id="currentLimitPerDay" style="color:var(--orange);">1 per day</strong></div>
+                </div>
+                <button class="btn-primary" onclick="saveSellLimits()" id="saveLimitsBtn">
+                    <i class="fas fa-save"></i> Save Limits
+                </button>
+            </div>
+            <!-- Transaction Limits -->
+            <div class="panel">
+                <div class="panel-title"><i class="fas fa-exchange-alt"></i> Transaction Limits</div>
+                <p style="font-size:13px;color:var(--dim);margin-bottom:20px;">Control P2P send limits per transaction.</p>
+                <div class="form-group">
+                    <label>Max P2P Send Per Transaction (SRC)</label>
+                    <input type="number" id="limitMaxSendSRC" placeholder="1000" min="1" step="1">
+                    <div style="font-size:12px;color:var(--dim);margin-top:4px;">Current: <strong id="currentLimitSend" style="color:var(--orange);">Unlimited</strong></div>
+                </div>
+                <div class="form-group">
+                    <label>Min P2P Send Per Transaction (SRC)</label>
+                    <input type="number" id="limitMinSendSRC" placeholder="0.01" min="0.01" step="0.01">
+                    <div style="font-size:12px;color:var(--dim);margin-top:4px;">Current: <strong id="currentLimitMinSend" style="color:var(--orange);">0.01 SRC</strong></div>
+                </div>
+                <button class="btn-primary" onclick="saveTransactionLimits()" id="saveTxLimitsBtn">
+                    <i class="fas fa-save"></i> Save Limits
+                </button>
+            </div>
+        </div>
+    </div><!-- end #limitsSection -->
+
 </div><!-- end main-panel -->
 
 <!-- ── AD DETAIL MODAL ── -->
@@ -674,7 +827,22 @@
         el.classList.add('show');
     }
 
-    auth.onAuthStateChanged(user => {
+    // Initialize community reserve if not exists
+    async function ensureSupplyDoc() {
+        const ref = db.collection('settings').doc('srcSupply');
+        const snap = await ref.get();
+        if (!snap.exists) {
+            await ref.set({
+                totalSupply:      10000000,
+                communityReserve: 10000000,
+                totalCirculating: 0,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            console.log('Community reserve initialized at 10,000,000 SRC');
+        }
+    }
+
+        auth.onAuthStateChanged(user => {
         if (user && user.uid === AUTHORIZED_UID) {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('mainPanel').style.display = 'block';
@@ -682,6 +850,12 @@
             av.innerHTML = user.photoURL ? `<img src="${user.photoURL}">` : (user.displayName||'A')[0].toUpperCase();
             document.getElementById('userName').textContent = user.displayName || user.email;
             loadAll();
+            ensureSupplyDoc().catch(e => console.warn('Supply init:', e));
+            // Load pending sells badge
+            db.collection('sellRequests').where('status','==','pending').get().then(s => {
+                const badge = document.getElementById('pendingSellsBadge');
+                if (badge && s.size > 0) { badge.textContent = s.size; badge.style.display = 'inline-block'; }
+            }).catch(()=>{});
         } else if (user) {
             auth.signOut();
             showLoginError('⛔ Access denied.');
@@ -1196,14 +1370,17 @@
     // NAV TABS
     // ══════════════════════════════════════════
     function switchTab(tab) {
-        document.getElementById('adsSection').style.display          = tab === 'ads'          ? 'block' : 'none';
-        document.getElementById('usersSection').style.display        = tab === 'users'        ? 'block' : 'none';
-        document.getElementById('coinSection').style.display         = tab === 'coin'         ? 'block' : 'none';
-        document.getElementById('tabAds').classList.toggle('active',          tab === 'ads');
-        document.getElementById('tabUsers').classList.toggle('active',        tab === 'users');
-        document.getElementById('tabCoin').classList.toggle('active',         tab === 'coin');
-        if (tab === 'users' && !allUsers.length) loadUsers();
-        if (tab === 'coin') initCoinTab();
+        ['ads','users','coin','sells','posts','limits'].forEach(t => {
+            const sec = document.getElementById(t + 'Section');
+            const btn = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
+            if (sec) sec.style.display = tab === t ? 'block' : 'none';
+            if (btn) btn.classList.toggle('active', tab === t);
+        });
+        if (tab === 'users'  && !allUsers.length) loadUsers();
+        if (tab === 'coin')   initCoinTab();
+        if (tab === 'sells')  loadSellRequests();
+        if (tab === 'posts')  loadAdminPosts();
+        if (tab === 'limits') loadLimits();
     }
     window.switchTab = switchTab;
 
@@ -1334,6 +1511,30 @@
 
 
     // ══════════════════════════════════════════
+    // COMMUNITY RESERVE — SUPPLY INIT
+    // ══════════════════════════════════════════
+
+    const TOTAL_SUPPLY = 10000000; // 10,000,000 SRC fixed forever
+
+    async function ensureSupplyExists() {
+        const ref = db.collection('settings').doc('srcSupply');
+        const snap = await ref.get();
+        if (!snap.exists) {
+            // First time setup — calculate existing circulating supply from user balances
+            const usersSnap = await db.collection('users').get();
+            const circulating = usersSnap.docs.reduce((s,d) => s + (d.data().srcWallet?.balance||0), 0);
+            await ref.set({
+                totalSupply:       TOTAL_SUPPLY,
+                communityReserve:  TOTAL_SUPPLY - circulating,
+                totalCirculating:  circulating,
+                totalBurned:       0,
+                initializedAt:     firebase.firestore.FieldValue.serverTimestamp()
+            });
+            toast(`Community reserve initialized. ${circulating.toFixed(2)} SRC already in circulation.`, 'info');
+        }
+    }
+
+    // ══════════════════════════════════════════
     // SRC COIN TAB
     // ══════════════════════════════════════════
 
@@ -1345,6 +1546,7 @@
     async function initCoinTab() {
         if (coinTabInited) return;
         coinTabInited = true;
+        await ensureSupplyExists();
         await loadSRCPrice();
         await loadPriceHistory();
         await loadCoinTxList();
@@ -1362,22 +1564,48 @@
 
     async function loadSRCPrice() {
         try {
-            const doc = await db.collection('settings').doc('currentPrice').get();
-            if (doc.exists) {
-                srcCurrentPrice = doc.data().price || 0;
-                srcOpeningPrice = doc.data().openingPrice || srcCurrentPrice;
+            const [priceDoc, supplyDoc] = await Promise.all([
+                db.collection('settings').doc('currentPrice').get(),
+                db.collection('settings').doc('srcSupply').get()
+            ]);
+            if (priceDoc.exists) {
+                srcCurrentPrice = priceDoc.data().price || 0;
+                srcOpeningPrice = priceDoc.data().openingPrice || srcCurrentPrice;
             }
-            updateCoinPriceDisplay();
+            updateCoinPriceDisplay(supplyDoc.exists ? supplyDoc.data() : null);
         } catch(e) { console.error('loadSRCPrice', e); }
     }
 
-    function updateCoinPriceDisplay() {
+    function updateCoinPriceDisplay(supplyData) {
         document.getElementById('coinCurrentPrice').textContent  = '₦' + srcCurrentPrice.toFixed(2);
         document.getElementById('coinOpeningPrice').textContent  = '₦' + srcOpeningPrice.toFixed(2);
         const pct  = srcOpeningPrice ? ((srcCurrentPrice - srcOpeningPrice) / srcOpeningPrice * 100).toFixed(2) : '0.00';
         const el   = document.getElementById('coinPriceChange');
         el.textContent = (pct > 0 ? '+' : '') + pct + '%';
         el.style.color = pct > 0 ? 'var(--green)' : pct < 0 ? 'var(--red)' : 'var(--dim)';
+
+        // Update reserve display if supply data provided
+        if (supplyData) {
+            const reserve  = supplyData.communityReserve || 0;
+            const circ     = supplyData.totalCirculating || 0;
+            const total    = supplyData.totalSupply      || 10000000;
+            const reservePct = ((reserve / total) * 100).toFixed(1);
+            const circPct    = ((circ    / total) * 100).toFixed(1);
+            const fmt = n => n.toLocaleString('en-US', { maximumFractionDigits: 2 });
+
+            const reserveEl = document.getElementById('coinReserve');
+            const circEl    = document.getElementById('coinCirculating');
+            const barEl     = document.getElementById('coinReserveBar');
+            if (reserveEl) reserveEl.textContent = fmt(reserve) + ' SRC';
+            if (circEl)    circEl.textContent    = fmt(circ)    + ' SRC';
+            if (barEl) {
+                barEl.innerHTML = `
+                    <div style="background:rgba(255,255,255,0.06);border-radius:6px;height:6px;overflow:hidden;margin-bottom:3px;">
+                        <div style="height:100%;background:var(--orange);border-radius:6px;width:${reservePct}%;"></div>
+                    </div>
+                    <span>${reservePct}% in reserve · ${circPct}% circulating</span>`;
+            }
+        }
     }
 
     async function updateSRCPrice() {
@@ -1466,18 +1694,57 @@
         const oldBal = coinFoundUser.srcWallet?.balance || 0;
         const newBal = oldBal + amount;
         try {
-            await db.collection('users').doc(coinFoundUser.id).update({ 'srcWallet.balance': newBal });
+            // Check community reserve has enough
+            const supplySnap = await db.collection('settings').doc('srcSupply').get();
+            const supply = supplySnap.exists ? supplySnap.data() : {};
+            const reserve = supply.communityReserve || 0;
+            if (amount > reserve) {
+                toast(`Insufficient community reserve. Only ${reserve.toFixed(2)} SRC available.`, 'error');
+                return;
+            }
+
+            await db.runTransaction(async tx => {
+                const userRef   = db.collection('users').doc(coinFoundUser.id);
+                const supplyRef = db.collection('settings').doc('srcSupply');
+                const userSnap  = await tx.get(userRef);
+                const curBal    = userSnap.data()?.srcWallet?.balance || 0;
+                tx.update(userRef, { 'srcWallet.balance': curBal + amount });
+                tx.set(supplyRef, {
+                    ...supply,
+                    communityReserve:  reserve - amount,
+                    totalCirculating:  (supply.totalCirculating || 0) + amount,
+                    updatedAt: new Date().toISOString()
+                });
+            });
+
+            // Log admin transaction
             await db.collection('adminTransactions').add({
                 type: 'send', toWallet: coinFoundUser.srcWallet?.address,
                 toUsername: coinFoundUser.username||'',
                 amount, previousBalance: oldBal, newBalance: newBal,
+                source: 'community_reserve',
+                note: `Admin sent ${amount} SRC from community reserve to @${coinFoundUser.username}`,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
+            // Trace in transactions collection
+            await db.collection('transactions').add({
+                type: 'admin_send',
+                toUid: coinFoundUser.id,
+                toWallet: coinFoundUser.srcWallet?.address,
+                toUsername: coinFoundUser.username||'',
+                srcAmount: amount,
+                source: 'community_reserve',
+                note: `Admin disbursement: ${amount} SRC from community reserve to @${coinFoundUser.username}`,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
             coinFoundUser.srcWallet = { ...coinFoundUser.srcWallet, balance: newBal };
             document.getElementById('coinUserBalance').textContent = newBal.toFixed(4) + ' SRC';
             document.getElementById('coinSendAmount').value = '';
+            srcCurrentPrice = supply.communityReserve - amount;
             toast(`Sent ${amount.toFixed(2)} SRC to @${coinFoundUser.username||coinFoundUser.srcWallet?.address}`, 'success');
             loadCoinTxList();
+            loadSRCPrice();
         } catch(e) { toast('Failed: ' + e.message, 'error'); }
     }
     window.coinSend = coinSend;
@@ -1490,18 +1757,48 @@
         if (amount > oldBal) { toast(`Insufficient balance. User only has ${oldBal.toFixed(2)} SRC`, 'error'); return; }
         const newBal = oldBal - amount;
         try {
-            await db.collection('users').doc(coinFoundUser.id).update({ 'srcWallet.balance': newBal });
+            const supplySnap = await db.collection('settings').doc('srcSupply').get();
+            const supply = supplySnap.exists ? supplySnap.data() : {};
+
+            await db.runTransaction(async tx => {
+                const userRef   = db.collection('users').doc(coinFoundUser.id);
+                const supplyRef = db.collection('settings').doc('srcSupply');
+                const userSnap  = await tx.get(userRef);
+                const curBal    = userSnap.data()?.srcWallet?.balance || 0;
+                tx.update(userRef, { 'srcWallet.balance': curBal - amount });
+                tx.set(supplyRef, {
+                    ...supply,
+                    communityReserve:  (supply.communityReserve || 0) + amount,
+                    totalCirculating:  Math.max(0, (supply.totalCirculating || 0) - amount),
+                    updatedAt: new Date().toISOString()
+                });
+            });
+
             await db.collection('adminTransactions').add({
                 type: 'deduct', fromWallet: coinFoundUser.srcWallet?.address,
                 fromUsername: coinFoundUser.username||'',
                 amount, previousBalance: oldBal, newBalance: newBal,
+                destination: 'community_reserve',
+                note: `Admin deducted ${amount} SRC from @${coinFoundUser.username} → returned to community reserve`,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
+            await db.collection('transactions').add({
+                type: 'admin_deduct',
+                fromUid: coinFoundUser.id,
+                fromWallet: coinFoundUser.srcWallet?.address,
+                fromUsername: coinFoundUser.username||'',
+                srcAmount: amount,
+                destination: 'community_reserve',
+                note: `Admin deduction: ${amount} SRC from @${coinFoundUser.username} → community reserve`,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
             coinFoundUser.srcWallet = { ...coinFoundUser.srcWallet, balance: newBal };
             document.getElementById('coinUserBalance').textContent = newBal.toFixed(4) + ' SRC';
             document.getElementById('coinDeductAmount').value = '';
             toast(`Deducted ${amount.toFixed(2)} SRC from @${coinFoundUser.username||coinFoundUser.srcWallet?.address}`, 'success');
             loadCoinTxList();
+            loadSRCPrice();
         } catch(e) { toast('Failed: ' + e.message, 'error'); }
     }
     window.coinDeduct = coinDeduct;
@@ -1561,6 +1858,340 @@
     let vStatResets = 0;
 
 
+
+
+    // ══════════════════════════════════════════
+    // COMMUNITY RESERVE DISPLAY
+    // ══════════════════════════════════════════
+
+    async function loadSupplyStats() {
+        try {
+            const snap = await db.collection('settings').doc('srcSupply').get();
+            if (!snap.exists) return;
+            const d = snap.data();
+            const reserve     = d.communityReserve  || 0;
+            const circulating = d.totalCirculating  || 0;
+            const total       = d.totalSupply        || 10000000;
+            const pct         = ((reserve / total) * 100).toFixed(1);
+
+            if (document.getElementById('coinReserve'))
+                document.getElementById('coinReserve').textContent = reserve.toLocaleString() + ' SRC';
+            if (document.getElementById('coinCirculating'))
+                document.getElementById('coinCirculating').textContent = circulating.toLocaleString() + ' SRC';
+            if (document.getElementById('coinTotalSupply'))
+                document.getElementById('coinTotalSupply').textContent = total.toLocaleString();
+            if (document.getElementById('coinReserveBar'))
+                document.getElementById('coinReserveBar').innerHTML =
+                    `<div style="background:rgba(255,255,255,0.08);border-radius:4px;height:4px;margin-top:6px;">
+                        <div style="background:var(--orange);height:4px;border-radius:4px;width:${pct}%;transition:width 0.5s;"></div>
+                     </div><span style="font-size:10px;">${pct}% in reserve</span>`;
+        } catch(e) { console.error('loadSupplyStats', e); }
+    }
+
+    // Override initCoinTab to also load supply stats
+    const _origInitCoinTab = initCoinTab;
+    async function initCoinTabWithSupply() {
+        await _origInitCoinTab();
+        await loadSupplyStats();
+    }
+    // Re-bind
+    window.initCoinTab = async function() {
+        if (coinTabInited) { await loadSupplyStats(); return; }
+        coinTabInited = true;
+        await loadSRCPrice();
+        await loadPriceHistory();
+        await loadCoinTxList();
+        await loadSupplyStats();
+        if (allUsers.length) {
+            const total = allUsers.reduce((s,u) => s + (u.srcWallet?.balance||0), 0);
+            document.getElementById('coinTotalSRC') && (document.getElementById('coinTotalSRC').textContent = total.toFixed(2) + ' SRC');
+        } else {
+            db.collection('users').get().then(snap => {
+                const total = snap.docs.reduce((s,d) => s + (d.data().srcWallet?.balance||0), 0);
+                document.getElementById('coinTotalSRC') && (document.getElementById('coinTotalSRC').textContent = total.toFixed(2) + ' SRC');
+            });
+        }
+    };
+
+    // ══════════════════════════════════════════
+    // SELL REQUESTS
+    // ══════════════════════════════════════════
+
+    let allSells = [];
+    let sellsFilter = 'pending';
+
+    async function loadSellRequests() {
+        document.getElementById('sellsTableBody').innerHTML =
+            '<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--dim);"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td></tr>';
+        try {
+            const snap = await db.collection('sellRequests').orderBy('createdAt','desc').get();
+            allSells = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            updateSellStats();
+            renderSellsTable();
+        } catch(e) {
+            // Fallback without orderBy if index not ready
+            const snap2 = await db.collection('sellRequests').get();
+            allSells = snap2.docs.map(d => ({ id: d.id, ...d.data() }))
+                .sort((a,b) => (b.timestamp||'').localeCompare(a.timestamp||''));
+            updateSellStats();
+            renderSellsTable();
+        }
+    }
+    window.loadSellRequests = loadSellRequests;
+
+    function updateSellStats() {
+        const pending   = allSells.filter(s => s.status === 'pending').length;
+        const completed = allSells.filter(s => s.status === 'completed').length;
+        const totalSRC  = allSells.reduce((s,r) => s + (r.srcAmount||r.amount||0), 0);
+        const totalNGN  = allSells.filter(s => s.status === 'completed')
+                                  .reduce((s,r) => s + (r.netPayout||0), 0);
+        document.getElementById('sellStatPending').textContent  = pending;
+        document.getElementById('sellStatDone').textContent     = completed;
+        document.getElementById('sellStatSRC').textContent      = totalSRC.toFixed(2);
+        document.getElementById('sellStatNGN').textContent      = '₦' + totalNGN.toLocaleString('en-NG',{minimumFractionDigits:2});
+        const badge = document.getElementById('pendingSellsBadge');
+        if (pending > 0) { badge.textContent = pending; badge.style.display = 'inline-block'; }
+        else badge.style.display = 'none';
+    }
+
+    function setSellFilter(f) {
+        sellsFilter = f;
+        document.querySelectorAll('#sellFilterTabs .filter-tab').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+        renderSellsTable();
+    }
+    window.setSellFilter = setSellFilter;
+
+    function renderSellsTable() {
+        let sells = allSells;
+        if (sellsFilter !== 'all') sells = sells.filter(s => s.status === sellsFilter);
+        const tbody = document.getElementById('sellsTableBody');
+        if (!sells.length) {
+            tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:36px;color:var(--dim);">No ${sellsFilter} sell requests</td></tr>`;
+            return;
+        }
+        tbody.innerHTML = sells.map(s => {
+            const when = s.timestamp ? new Date(s.timestamp).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '—';
+            const srcAmt = (s.srcAmount || s.amount || 0).toFixed(4);
+            const statusBadge = s.status === 'completed'
+                ? '<span class="badge badge-active"><i class="fas fa-check"></i> Completed</span>'
+                : '<span class="badge badge-pending"><i class="fas fa-clock"></i> Pending</span>';
+            const actionBtn = s.status === 'pending'
+                ? `<button class="btn-edit" onclick="markSellComplete('${s.id}','${s.username||''}','${(s.srcAmount||s.amount||0)}')" style="white-space:nowrap;">
+                       <i class="fas fa-check"></i> Mark Paid
+                   </button>`
+                : `<span style="color:var(--dim);font-size:12px;">—</span>`;
+            return `<tr>
+                <td style="font-weight:600;">@${s.username||'—'}<br><span style="font-size:11px;color:var(--dim);">${s.walletAddress||''}</span></td>
+                <td style="font-family:'Space Mono',monospace;color:var(--orange);">${srcAmt}</td>
+                <td>₦${(s.grossValue||0).toLocaleString('en-NG',{minimumFractionDigits:2})}</td>
+                <td style="color:var(--red);">₦${(s.fee||0).toLocaleString()}</td>
+                <td style="color:var(--green);font-weight:600;">₦${(s.netPayout||0).toLocaleString('en-NG',{minimumFractionDigits:2})}</td>
+                <td style="font-size:12px;">${s.bankName||'—'}<br><span style="color:var(--dim);">${s.accountNumber||'—'}</span><br><span style="color:var(--dim);">${s.email||'—'}</span></td>
+                <td style="font-size:12px;color:var(--dim);">${when}</td>
+                <td>${statusBadge}</td>
+                <td>${actionBtn}</td>
+            </tr>`;
+        }).join('');
+    }
+
+    async function markSellComplete(sellId, username, srcAmount) {
+        if (!confirm(`Mark sell request from @${username} as paid?\n\nMake sure you have sent the Naira to their bank account before confirming.`)) return;
+        try {
+            await db.collection('sellRequests').doc(sellId).update({
+                status: 'completed',
+                completedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            // Log the completion
+            await db.collection('transactions').add({
+                type: 'sell_completed',
+                sellId,
+                username,
+                srcAmount: parseFloat(srcAmount),
+                note: `Admin marked sell request as paid for @${username}`,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            const s = allSells.find(x => x.id === sellId);
+            if (s) s.status = 'completed';
+            updateSellStats();
+            renderSellsTable();
+            toast(`Sell request for @${username} marked as completed`, 'success');
+        } catch(e) { toast('Failed: ' + e.message, 'error'); }
+    }
+    window.markSellComplete = markSellComplete;
+
+    // ══════════════════════════════════════════
+    // ADMIN POST CREATION
+    // ══════════════════════════════════════════
+
+    function toggleAdminPostType() {
+        const type = document.getElementById('adminPostType').value;
+        document.getElementById('adminTextFields').style.display = type === 'text' ? 'block' : 'none';
+        document.getElementById('adminYTFields').style.display   = type === 'youtube' ? 'block' : 'none';
+    }
+    window.toggleAdminPostType = toggleAdminPostType;
+
+    async function adminCreatePost() {
+        const type  = document.getElementById('adminPostType').value;
+        const btn   = document.getElementById('adminPostBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Publishing...';
+        try {
+            let postData = {
+                uid: auth.currentUser.uid,
+                username: 'Silranus',
+                avatar: null,
+                isAdminPost: true,
+                likes: 0, likedBy: [], comments: [],
+                support: { total: 0, count: 0 },
+                timestamp: new Date().toISOString(),
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            if (type === 'text') {
+                const text  = document.getElementById('adminPostText').value.trim();
+                const title = document.getElementById('adminPostTitle').value.trim();
+                const image = document.getElementById('adminPostImage').value.trim();
+                if (!text) { toast('Post text is required', 'error'); return; }
+                const keywords = [...new Set((text+' '+title).toLowerCase()
+                    .replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(w => w.length > 1))];
+                postData = { ...postData, type: 'text', text, title, imageUrl: image, keywords };
+            } else {
+                const yt    = document.getElementById('adminPostYT').value.trim();
+                const title = document.getElementById('adminPostYTTitle').value.trim();
+                if (!yt) { toast('YouTube URL is required', 'error'); return; }
+                const ytId  = yt.match(/(?:v=|youtu\.be\/)([^&\s]+)/)?.[1] || '';
+                postData = { ...postData, type: 'youtube', youtubeUrl: yt,
+                    embedUrl: ytId ? `https://www.youtube.com/embed/${ytId}` : '',
+                    title, text: title, keywords: [title.toLowerCase()] };
+            }
+
+            await db.collection('posts').add(postData);
+            toast('Post published!', 'success');
+
+            // Reset form
+            document.getElementById('adminPostText').value  = '';
+            document.getElementById('adminPostTitle').value = '';
+            document.getElementById('adminPostImage').value = '';
+            document.getElementById('adminPostYT').value    = '';
+            document.getElementById('adminPostYTTitle').value = '';
+            document.getElementById('adminCharCount').textContent = '0/500';
+            loadAdminPosts();
+        } catch(e) {
+            toast('Failed: ' + e.message, 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Publish Post';
+        }
+    }
+    window.adminCreatePost = adminCreatePost;
+
+    async function loadAdminPosts() {
+        const el = document.getElementById('adminPostsList');
+        try {
+            const snap = await db.collection('posts').orderBy('createdAt','desc').limit(10).get();
+            if (snap.empty) { el.innerHTML = '<span style="color:var(--dim);">No posts yet</span>'; return; }
+            el.innerHTML = snap.docs.map(d => {
+                const p = d.data();
+                const when = p.timestamp ? new Date(p.timestamp).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '—';
+                const preview = (p.text||p.title||'[YouTube Post]').slice(0,80) + ((p.text||'').length > 80 ? '...' : '');
+                return `<div style="padding:12px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:10px;">
+                    <div>
+                        <div style="font-size:13px;font-weight:500;margin-bottom:4px;">${preview}</div>
+                        <div style="font-size:11px;color:var(--dim);">${when} · ❤ ${p.likes||0} · 💬 ${(p.comments||[]).length}</div>
+                    </div>
+                    <button class="btn-danger" onclick="deleteAdminPost('${d.id}')" style="flex-shrink:0;padding:6px 10px;">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>`;
+            }).join('');
+        } catch(e) {
+            el.innerHTML = '<span style="color:var(--red);">Error loading posts</span>';
+        }
+    }
+    window.loadAdminPosts = loadAdminPosts;
+
+    async function deleteAdminPost(postId) {
+        if (!confirm('Delete this post permanently?')) return;
+        try {
+            await db.collection('posts').doc(postId).delete();
+            toast('Post deleted', 'info');
+            loadAdminPosts();
+        } catch(e) { toast('Failed: ' + e.message, 'error'); }
+    }
+    window.deleteAdminPost = deleteAdminPost;
+
+    // ══════════════════════════════════════════
+    // LIMITS MANAGEMENT
+    // ══════════════════════════════════════════
+
+    async function loadLimits() {
+        try {
+            const sellSnap = await db.collection('settings').doc('sellLimits').get();
+            const txSnap   = await db.collection('settings').doc('txLimits').get();
+            const sell = sellSnap.exists ? sellSnap.data() : {};
+            const tx   = txSnap.exists  ? txSnap.data()   : {};
+
+            const maxNGN    = sell.maxDailyNGN || 10000;
+            const maxPerDay = sell.maxPerDay   || 1;
+            const maxSend   = tx.maxSendSRC    || null;
+            const minSend   = tx.minSendSRC    || 0.01;
+
+            document.getElementById('currentLimitNGN').textContent    = '₦' + maxNGN.toLocaleString();
+            document.getElementById('currentLimitPerDay').textContent = maxPerDay + ' per day';
+            document.getElementById('currentLimitSend').textContent   = maxSend ? maxSend + ' SRC' : 'Unlimited';
+            document.getElementById('currentLimitMinSend').textContent = minSend + ' SRC';
+
+            document.getElementById('limitMaxNGN').placeholder    = maxNGN;
+            document.getElementById('limitMaxPerDay').placeholder = maxPerDay;
+            document.getElementById('limitMaxSendSRC').placeholder = maxSend || 'Unlimited';
+            document.getElementById('limitMinSendSRC').placeholder = minSend;
+        } catch(e) { toast('Failed to load limits: ' + e.message, 'error'); }
+    }
+    window.loadLimits = loadLimits;
+
+    async function saveSellLimits() {
+        const maxNGN    = parseFloat(document.getElementById('limitMaxNGN').value);
+        const maxPerDay = parseInt(document.getElementById('limitMaxPerDay').value);
+        if (!maxNGN && !maxPerDay) { toast('Enter at least one value to update', 'error'); return; }
+        const btn = document.getElementById('saveLimitsBtn');
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Saving...';
+        try {
+            const existing = (await db.collection('settings').doc('sellLimits').get()).data() || {};
+            await db.collection('settings').doc('sellLimits').set({
+                ...existing,
+                maxDailyNGN: maxNGN    || existing.maxDailyNGN || 10000,
+                maxPerDay:   maxPerDay || existing.maxPerDay   || 1,
+                updatedAt:   firebase.firestore.FieldValue.serverTimestamp()
+            });
+            toast('Sell limits saved', 'success');
+            document.getElementById('limitMaxNGN').value    = '';
+            document.getElementById('limitMaxPerDay').value = '';
+            loadLimits();
+        } catch(e) { toast('Failed: ' + e.message, 'error'); }
+        finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Save Limits'; }
+    }
+    window.saveSellLimits = saveSellLimits;
+
+    async function saveTransactionLimits() {
+        const maxSend = parseFloat(document.getElementById('limitMaxSendSRC').value) || null;
+        const minSend = parseFloat(document.getElementById('limitMinSendSRC').value) || 0.01;
+        const btn = document.getElementById('saveTxLimitsBtn');
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Saving...';
+        try {
+            await db.collection('settings').doc('txLimits').set({
+                maxSendSRC: maxSend,
+                minSendSRC: minSend,
+                updatedAt:  firebase.firestore.FieldValue.serverTimestamp()
+            });
+            toast('Transaction limits saved', 'success');
+            document.getElementById('limitMaxSendSRC').value = '';
+            document.getElementById('limitMinSendSRC').value = '';
+            loadLimits();
+        } catch(e) { toast('Failed: ' + e.message, 'error'); }
+        finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Save Limits'; }
+    }
+    window.saveTransactionLimits = saveTransactionLimits;
 
     // Close modals on overlay click
     document.getElementById('adDetailOverlay').addEventListener('click', function(e) {
